@@ -1,2 +1,45 @@
-// Import all of Bootstrap's CSS
-@import "bootstrap/scss/bootstrap";
+// Define color variables
+$black: #2c2c2c;
+$purple: #800080;
+
+// Override Bootstrap variables for button styles
+$btn-primary-bg: $purple;
+$btn-primary-color: #ffffff;
+$btn-primary-border: $purple;
+
+
+// Import Bootstrap SCSS
+@import "~bootstrap/scss/bootstrap";
+
+// Custom styles for dark black background
+body {
+  background-color: $black;
+}
+
+// Additional styles for purple accenting
+.btn-primary {
+  &:hover,
+  &:focus {
+    background-color: darken($purple, 10%);
+    border-color: darken($purple, 10%);
+  }
+}
+
+// Define your custom margin value
+$custom-margin: 20px;
+
+// Apply the custom margin to all HTML elements except certain elements inside the navbar
+*:not(nav.navbar > .container-fluid > *):not(nav.navbar) {
+  margin: $custom-margin;
+}
+
+
+
+// Define your custom text color
+$custom-text-color: #c6c6c6;
+
+// Apply the custom text color to all HTML elements
+* {
+  color: $custom-text-color;
+}
+
