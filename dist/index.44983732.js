@@ -3,7 +3,6 @@ const form = document.getElementById("taskform");
 const button = document.querySelector("#taskform > button"); // Complex CSS query
 const tasklist = document.getElementById("tasklist");
 const taskInput = document.getElementById("taskInput");
-const gameAPI = "https://api.rawg.io/docs/?format=openapi";
 // Event listener for Button click
 // This could also be form.addEventListener("submit", function() {...} )
 button.addEventListener("click", function(event) {
