@@ -1,5 +1,7 @@
 const apiKey = '91574a6ba1164bd5a7cb766c4251213b';
-const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`
+const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+let currentPage = 1;
+let totalPages = 1;
 
 // Function to call the API
 async function callAPI() {
@@ -46,6 +48,21 @@ function displayGames(games) {
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
     });
+
+// Event listeners for pagination buttons
+document.getElementById('prevPage').addEventListener('click', () => {
+  if (currentPage > 1) {
+      currentPage--;
+      callAPI(currentPage);
+  }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+  if (currentPage < totalPages) {
+      currentPage++;
+      callAPI(currentPage);
+  }
+});
 }
 
 // Call the function

@@ -13221,7 +13221,7 @@ body {
 }
 
 #game-container h1, #game-container .h1 {
-  text-align: center;
+  text-align: left;
   margin-bottom: 20px;
 }
 
@@ -13253,5 +13253,25 @@ body {
 .game-release-date {
   color: #c6c6c6;
   font-size: 14px;
+}
+
+#pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#pagination button {
+  color: #fff;
+  cursor: pointer;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+  padding: 10px 20px;
+}
+
+#pagination button:disabled {
+  cursor: not-allowed;
+  background-color: #d3d3d3;
 }
 /*# sourceMappingURL=index.044e704e.css.map */
