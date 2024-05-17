@@ -1,94 +1,52 @@
-// Setting up variables for our HTML elements using DOM selection
-const form = document.getElementById("taskform");
-const button = document.querySelector("#taskform > button"); // Complex CSS query
-const tasklist = document.getElementById("tasklist");
-const taskInput = document.getElementById("taskInput");
+const apiKey = '91574a6ba1164bd5a7cb766c4251213b';
+const url = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`
 
-
-// Event listener for Button click
-// This could also be form.addEventListener("submit", function() {...} )
-button.addEventListener("click", function(event) {
-  event.preventDefault(); // Not as necessary for button, but needed for form submit
-
-  let task = form.elements.task.value; // could be swapped out for line below
-  //let task = taskInput.value;
-
-  let date = (new Date()).toLocaleDateString('en-US') //Convert to short date format
-
-  // Call the addTask() function using
-  addTask(task, date, "26/03/2021", "Low", ["1", "30"], false);
-
-  // Log out the newly populated taskList everytime the button has been pressed
-  console.log(taskList);
-})
-
-async function fetchData() {
-  try {
-    const response = await fetch("https://api.rawg.io/docs/?format=openapi");
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return null;
-  }
+// Function to call the API
+async function callAPI() {
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayGames(data.results);
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
 }
 
-// Example usage:
-fetchData()
-  .then(data => {
-    if (data) {
-      console.log("Fetched data:", data);
-      // You can do something with the fetched data here
-    } else {
-      console.log("No data fetched.");
-    }
-  })
-  .catch(error => console.error("Error:", error));
+// Function to display games
+function displayGames(games) {
+    const gamesContainer = document.getElementById('games');
+    games.forEach(game => {
+        const gameElement = document.createElement('div');
+        gameElement.className = 'game';
 
+        const gameImage = document.createElement('img');
+        gameImage.src = game.background_image;
+        gameImage.alt = `${game.name} cover image`;
 
-// Create an empty array to store our tasks
-var taskList = [];
+        const gameDetails = document.createElement('div');
+        gameDetails.className = 'game-details';
 
-function addTask(taskDescription, createdDate, dueDate, priorityRating, estimatedTime, completionStatus) {
-  let task = {
-    taskDescription,
-    createdDate,
-    dueDate,
-    priorityRating,
-    estimatedTime,
-    completionStatus
-  };
+        const gameTitle = document.createElement('div');
+        gameTitle.className = 'game-title';
+        gameTitle.textContent = game.name;
 
-  // Add the task to our array of tasks
-  taskList.push(task);
+        const gameReleaseDate = document.createElement('div');
+        gameReleaseDate.className = 'game-release-date';
+        gameReleaseDate.textContent = `Released: ${game.released}`;
 
-  // Separate the DOM manipulation from the object creation logic
-  renderTask(task);
+        gameDetails.appendChild(gameTitle);
+        gameDetails.appendChild(gameReleaseDate);
+        gameElement.appendChild(gameImage);
+        gameElement.appendChild(gameDetails);
+        gamesContainer.appendChild(gameElement);
+    });
 }
 
-
-// Function to display the item on the page
-function renderTask(task) {
-  let item = document.createElement("li");
-  item.innerHTML = "<p>" + task.taskDescription + "</p>";
-
-  tasklist.appendChild(item);
-
-  // Setup delete button DOM elements
-  let delButton = document.createElement("button");
-  let delButtonText = document.createTextNode("Delete");
-  delButton.appendChild(delButtonText);
-  item.appendChild(delButton); // Adds a delete button to every task
-
-  // Listen for when the 
-  delButton.addEventListener("click", function(event){
-    item.remove(); // Remove the task item from the page when button clicked
-    // Because we used 'let' to define the item, this will always delete the right element. this is straight up wrong. silly stuff.
-  })
-  
-  // Clear the value of the input once the task has been added to the page
-  form.reset();
-}
+// Call the function
+callAPI();
