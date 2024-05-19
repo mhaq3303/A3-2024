@@ -7,20 +7,21 @@ $btn-primary-bg: $purple;
 $btn-primary-color: #ffffff;
 $btn-primary-border: $purple;
 
-
 // Import Bootstrap SCSS
 @import "~bootstrap/scss/bootstrap";
 
 // Import Raleway font
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
-
 // Custom styles for dark black background
 body {
   font-family: 'Raleway', sans-serif;
   background-color: $black;
+  display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 100vh; // Ensures the body takes the full viewport height
+  margin: 0; // Removes default margin
 }
 
 // Additional styles for purple accenting
@@ -40,8 +41,6 @@ $custom-margin: 20px;
   margin: $custom-margin;
 }
 
-
-
 // Define your custom text color
 $custom-text-color: #c6c6c6;
 
@@ -57,22 +56,28 @@ $custom-text-color: #c6c6c6;
   border-radius: 5px;
   width: 80%;
   max-width: 800px;
+  text-align: center; // Center the content inside the container
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #game-container h1 {
-  text-align: left;
+  text-align: center;
   margin-bottom: 20px;
 }
 
 .game {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   margin-bottom: 15px;
+  width: 100%; // Ensure game items take the full width of the container
 }
 
 .game img {
-  width: 500px;
-  height: 200px;
+  width: 200px; // Fixed width
+  height: 200px; // Fixed height
   margin-right: 20px;
   border-radius: 5px;
   object-fit: cover;
@@ -81,6 +86,7 @@ $custom-text-color: #c6c6c6;
 .game-details {
   display: flex;
   flex-direction: column;
+  align-items: flex-start; // Align text to the left
 }
 
 .game-title {
@@ -89,10 +95,14 @@ $custom-text-color: #c6c6c6;
   margin-bottom: 5px;
 }
 
-.game-release-date {
+.game-release-date,
+.game-platforms {
   font-size: 14px;
   color: $custom-text-color;
+  align-items: flex-start;
+  margin-bottom: 5px; // Adds some spacing between details
 }
+
 
 #pagination {
   text-align: center;
@@ -113,4 +123,3 @@ $custom-text-color: #c6c6c6;
   background-color: #d3d3d3;
   cursor: not-allowed;
 }
-
