@@ -61,6 +61,7 @@ body {
 .game-details {
   flex-direction: column;
   align-items: flex-start;
+  width: 100%;
   display: flex;
 }
 
@@ -70,8 +71,11 @@ body {
   font-weight: bold;
 }
 
-.game-release-date {
+.game-release-date, .game-platforms, .game-genres {
   color: #c6c6c6;
+  text-align: left;
+  width: 100%;
+  margin-top: 5px;
   font-size: 14px;
 }
 
@@ -86,12 +90,44 @@ body {
 }
 
 #pagination .page-link {
+  color: #c6c6c6;
+  background-color: #1d1d1d;
+  border: none;
   margin: 0 2px;
   padding: 10px 15px;
+}
+
+#pagination .page-link:hover {
+  color: #434143;
+  background-color: #5e3787;
 }
 
 #pagination .page-item.disabled .page-link {
   cursor: not-allowed;
   background-color: #d3d3d3;
+}
+
+.dropdown-menu {
+  background-color: #1d1d1d;
+}
+
+.dropdown-item {
+  color: #c6c6c6;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #434143;
+  background-color: #5e3787;
+}
+
+.dropdown-toggle {
+  color: #c6c6c6;
+  background-color: #1d1d1d;
+  border: none;
+}
+
+.dropdown-toggle:hover, .dropdown-toggle:focus {
+  color: #434143;
+  background-color: #5e3787;
 }
 /*# sourceMappingURL=index.044e704e.css.map */

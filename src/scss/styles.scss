@@ -1,14 +1,14 @@
 /* styles.css */
 
-
 /* Define color variables */
 $black: #2c2c2c;
 $purple: #800080;
-
-/* Override Bootstrap variables for button styles */
-$btn-primary-bg: $purple;
-$btn-primary-color: #ffffff;
-$btn-primary-border: $purple;
+$pagination-bg: #1d1d1d;
+$pagination-hover-bg: #5e3787;
+$pagination-hover-text: #434143;
+$dropdown-bg: #1d1d1d;
+$dropdown-hover-bg: #5e3787;
+$dropdown-hover-text: #434143;
 
 /* Import Raleway font */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
@@ -64,6 +64,7 @@ $custom-text-color: #c6c6c6;
   margin-top: 80px; /* Add space below the navbar */
 }
 
+
 #game-container h1 {
   text-align: center;
   margin-bottom: 20px;
@@ -89,6 +90,7 @@ $custom-text-color: #c6c6c6;
   display: flex;
   flex-direction: column;
   align-items: flex-start; /* Align text to the left */
+  width: 100%;
 }
 
 .game-title {
@@ -97,9 +99,12 @@ $custom-text-color: #c6c6c6;
   margin-bottom: 5px;
 }
 
-.game-release-date {
+.game-release-date, .game-platforms, .game-genres {
   font-size: 14px;
   color: $custom-text-color;
+  margin-top: 5px; /* Add some space between the details */
+  text-align: left;
+  width: 100%;
 }
 
 #pagination {
@@ -113,11 +118,45 @@ $custom-text-color: #c6c6c6;
 }
 
 #pagination .page-link {
+  background-color: $pagination-bg;
+  color: $custom-text-color;
+  border: none; /* Remove border */
   margin: 0 2px; /* Add a small margin between buttons */
   padding: 10px 15px;
+}
+
+#pagination .page-link:hover {
+  background-color: $pagination-hover-bg;
+  color: $pagination-hover-text;
 }
 
 #pagination .page-item.disabled .page-link {
   background-color: #d3d3d3;
   cursor: not-allowed;
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  background-color: $dropdown-bg;
+}
+
+.dropdown-item {
+  color: $custom-text-color;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  background-color: $dropdown-hover-bg;
+  color: $dropdown-hover-text;
+}
+
+/* Dropdown toggle button styles */
+.dropdown-toggle {
+  background-color: $dropdown-bg;
+  color: $custom-text-color;
+  border: none;
+}
+
+.dropdown-toggle:hover, .dropdown-toggle:focus {
+  background-color: $dropdown-hover-bg;
+  color: $dropdown-hover-text;
 }

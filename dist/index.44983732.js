@@ -38,9 +38,13 @@ function displayGames(games) {
         const gamePlatforms = document.createElement("div");
         gamePlatforms.className = "game-platforms";
         gamePlatforms.textContent = `Available Platforms: ${game.platforms.map((p)=>p.platform.name).join(", ")}`;
+        const gameGenres = document.createElement("div");
+        gameGenres.className = "game-genres";
+        gameGenres.textContent = `Genres: ${game.genres.map((g)=>g.name).join(", ")}`;
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
+        gameDetails.appendChild(gameGenres);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
