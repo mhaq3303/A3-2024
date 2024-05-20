@@ -1,30 +1,30 @@
-// Define color variables
+/* styles.css */
+
+
+/* Define color variables */
 $black: #2c2c2c;
 $purple: #800080;
 
-// Override Bootstrap variables for button styles
+/* Override Bootstrap variables for button styles */
 $btn-primary-bg: $purple;
 $btn-primary-color: #ffffff;
 $btn-primary-border: $purple;
 
-// Import Bootstrap SCSS
-@import "~bootstrap/scss/bootstrap";
-
-// Import Raleway font
+/* Import Raleway font */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
 
-// Custom styles for dark black background
+/* Custom styles for dark black background */
 body {
   font-family: 'Raleway', sans-serif;
   background-color: $black;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  min-height: 100vh; // Ensures the body takes the full viewport height
-  margin: 0; // Removes default margin
+  min-height: 100vh; /* Ensures the body takes the full viewport height */
+  margin: 0; /* Removes default margin */
 }
 
-// Additional styles for purple accenting
+/* Additional styles for purple accenting */
 .btn-primary {
   &:hover,
   &:focus {
@@ -33,31 +33,20 @@ body {
   }
 }
 
-// Define your custom margin value
+/* Define your custom margin value */
 $custom-margin: 20px;
 
-// Apply the custom margin to all HTML elements except certain elements inside the navbar
+/* Apply the custom margin to all HTML elements except certain elements inside the navbar */
 *:not(nav.navbar > .container-fluid > *):not(nav.navbar) {
   margin: $custom-margin;
 }
 
-// Define your custom text color
+/* Define your custom text color */
 $custom-text-color: #c6c6c6;
 
-// Apply the custom text color to all HTML elements
+/* Apply the custom text color to all HTML elements */
 * {
   color: $custom-text-color;
-}
-
-#decade-buttons {
-  margin-top: 60px; // Add space below the navbar
-  margin-bottom: 20px; // Add space below the buttons
-  text-align: center; // Center the buttons horizontally
-  width: 100%; // Ensure the buttons container takes the full width
-}
-
-#decade-buttons .btn {
-  margin: 0 10px; // Add horizontal spacing between buttons
 }
 
 #game-container {
@@ -67,10 +56,12 @@ $custom-text-color: #c6c6c6;
   border-radius: 5px;
   width: 80%;
   max-width: 800px;
-  text-align: center; // Center the content inside the container
+  text-align: center; /* Center the content inside the container */
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative; /* For absolute positioning of the dropdown */
+  margin-top: 80px; /* Add space below the navbar */
 }
 
 #game-container h1 {
@@ -83,12 +74,12 @@ $custom-text-color: #c6c6c6;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 15px;
-  width: 100%; // Ensure game items take the full width of the container
+  width: 100%; /* Ensure game items take the full width of the container */
 }
 
 .game img {
-  width: 200px; // Fixed width
-  height: 200px; // Fixed height
+  width: 200px; /* Fixed width */
+  height: 200px; /* Fixed height */
   margin-right: 20px;
   border-radius: 5px;
   object-fit: cover;
@@ -97,7 +88,7 @@ $custom-text-color: #c6c6c6;
 .game-details {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // Align text to the left
+  align-items: flex-start; /* Align text to the left */
 }
 
 .game-title {
@@ -111,27 +102,22 @@ $custom-text-color: #c6c6c6;
   color: $custom-text-color;
 }
 
-.game-platforms {
-  font-size: 14px;
-  color: $custom-text-color;
-}
-
 #pagination {
-  text-align: center;
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-#pagination button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 5px;
+#pagination .page-item {
+  margin: 0; /* Remove default margin */
 }
 
-#pagination button:disabled {
+#pagination .page-link {
+  margin: 0 2px; /* Add a small margin between buttons */
+  padding: 10px 15px;
+}
+
+#pagination .page-item.disabled .page-link {
   background-color: #d3d3d3;
   cursor: not-allowed;
 }

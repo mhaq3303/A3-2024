@@ -62,43 +62,46 @@ function displayGames(games) {
 
 // Function to update pagination buttons
 function updatePaginationButtons() {
-    document.getElementById('prevPage').disabled = currentPage <= 1;
-    document.getElementById('nextPage').disabled = currentPage >= totalPages;
+    for (let i = 1; i <= 8; i++) { // Assuming you have 8 buttons
+        const button = document.getElementById(`page-${i}`);
+        if (button) {
+            button.disabled = (i === currentPage);
+            button.style.display = i <= totalPages ? 'inline-block' : 'none'; // Show only the necessary buttons
+        }
+    }
 }
 
-// Event listeners for pagination buttons
-document.getElementById('prevPage').addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent default behavior
-    if (currentPage > 1) {
-        callAPI(currentPage - 1);
+document.addEventListener('DOMContentLoaded', () => {
+    // Event listeners for pagination buttons
+    for (let i = 1; i <= 8; i++) { // Assuming you have 8 buttons
+        const button = document.getElementById(`page-${i}`);
+        if (button) {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default behavior
+                callAPI(i);
+            });
+        }
     }
-});
 
-document.getElementById('nextPage').addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent default behavior
-    if (currentPage < totalPages) {
-        callAPI(currentPage + 1);
-    }
-});
+    // Event listeners for decade buttons
+    document.getElementById('decade-2000').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default behavior
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
+        callAPI(1); // Reset to page 1 when changing decades
+    });
 
-// Event listeners for decade buttons
-document.getElementById('decade-2000').addEventListener('click', () => {
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
-    currentPage = 1;
+    document.getElementById('decade-2010').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default behavior
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+        callAPI(1); // Reset to page 1 when changing decades
+    });
+
+    document.getElementById('decade-2020').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default behavior
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2023-12-31&platforms=18,1,7`;
+        callAPI(1); // Reset to page 1 when changing decades
+    });
+
+    // Initial API call
     callAPI(currentPage);
 });
-
-document.getElementById('decade-2010').addEventListener('click', () => {
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
-    currentPage = 1;
-    callAPI(currentPage);
-});
-
-document.getElementById('decade-2020').addEventListener('click', () => {
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2029-12-31&platforms=18,1,7`;
-    currentPage = 1;
-    callAPI(currentPage);
-});
-
-// Initial API call
-callAPI(currentPage);
