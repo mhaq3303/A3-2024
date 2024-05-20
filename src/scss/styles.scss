@@ -18,7 +18,7 @@ body {
   font-family: 'Raleway', sans-serif;
   background-color: $black;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   min-height: 100vh; // Ensures the body takes the full viewport height
   margin: 0; // Removes default margin
@@ -47,6 +47,17 @@ $custom-text-color: #c6c6c6;
 // Apply the custom text color to all HTML elements
 * {
   color: $custom-text-color;
+}
+
+#decade-buttons {
+  margin-top: 60px; // Add space below the navbar
+  margin-bottom: 20px; // Add space below the buttons
+  text-align: center; // Center the buttons horizontally
+  width: 100%; // Ensure the buttons container takes the full width
+}
+
+#decade-buttons .btn {
+  margin: 0 10px; // Add horizontal spacing between buttons
 }
 
 #game-container {
@@ -95,14 +106,15 @@ $custom-text-color: #c6c6c6;
   margin-bottom: 5px;
 }
 
-.game-release-date,
+.game-release-date {
+  font-size: 14px;
+  color: $custom-text-color;
+}
+
 .game-platforms {
   font-size: 14px;
   color: $custom-text-color;
-  align-items: flex-start;
-  margin-bottom: 5px; // Adds some spacing between details
 }
-
 
 #pagination {
   text-align: center;

@@ -1,5 +1,5 @@
 const apiKey = '91574a6ba1164bd5a7cb766c4251213b';
-const baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
 let currentPage = 1;
 let totalPages = 1;
 
@@ -79,6 +79,25 @@ document.getElementById('nextPage').addEventListener('click', (event) => {
     if (currentPage < totalPages) {
         callAPI(currentPage + 1);
     }
+});
+
+// Event listeners for decade buttons
+document.getElementById('decade-2000').addEventListener('click', () => {
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
+    currentPage = 1;
+    callAPI(currentPage);
+});
+
+document.getElementById('decade-2010').addEventListener('click', () => {
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+    currentPage = 1;
+    callAPI(currentPage);
+});
+
+document.getElementById('decade-2020').addEventListener('click', () => {
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2029-12-31&platforms=18,1,7`;
+    currentPage = 1;
+    callAPI(currentPage);
 });
 
 // Initial API call

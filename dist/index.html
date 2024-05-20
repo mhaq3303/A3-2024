@@ -1,30 +1,31 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GameTraka: Log Your Games</title>
-    <link rel="stylesheet" href="/index.044e704e.css">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GameTraka: Log Your Games</title>
+  <link rel="stylesheet" href="/index.044e704e.css">
+  <script src="/index.18dbc454.js" defer=""></script>
 </head>
 <body>
-    <nav class="navbar fixed-top navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">GameTraka</a>
+  <nav class="navbar fixed-top navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">GameTraka</a>
+  </nav>
+  <div id="decade-buttons">
+    <button type="button" id="decade-2000" class="btn btn-primary btn-lg">2000-2009</button>
+    <button type="button" id="decade-2010" class="btn btn-primary btn-lg">2010-2019</button>
+    <button type="button" id="decade-2020" class="btn btn-primary btn-lg">2020-2023</button>
+  </div>
+  <div id="game-container">
+    <h1><b>Game List</b></h1>
+    <div id="games"></div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#" id="prevPage">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#" id="nextPage">Next</a></li>
+      </ul>
     </nav>
-    <div id="game-container">
-        <h1><b>Game List (2010-2019)</b></h1>
-        <div id="games"></div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item">
-                    <button id="prevPage" class="page-link">Previous</button>
-                </li>
-                <li class="page-item">
-                    <button id="nextPage" class="page-link">Next</button>
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <script src="/index.44983732.js"></script>
-<script src="/A3%202024%20Test.59712999.js"></script></body>
+  </div>
+  <script src="/index.44983732.js"></script>
+</body>
 </html>
