@@ -99,12 +99,16 @@ function handleFetchError(error) {
     }
 }
 
-// Function to display game details
 function displayGameDetails(game) {
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
     gamesContainer.style.display = 'none';
     gameDetailsContainer.style.display = 'block';
+
+    const developers = game.developers.map(dev => dev.name).join(', ');
+    const publishers = game.publishers.map(pub => pub.name).join(', ');
+    const metascore = game.metacritic;
+
     gameDetailsContainer.innerHTML = `
         <div class="game-details-page">
             <h2>${game.name}</h2>
@@ -112,12 +116,14 @@ function displayGameDetails(game) {
             <p><strong>Released:</strong> ${game.released}</p>
             <p><strong>Available Platforms:</strong> ${game.platforms.map(p => p.platform.name).join(', ')}</p>
             <p><strong>Genres:</strong> ${game.genres.map(g => g.name).join(', ')}</p>
+            <p><strong>Developers:</strong> ${developers}</p>
+            <p><strong>Publishers:</strong> ${publishers}</p>
+            <p><strong>Metascore:</strong> ${metascore}</p>
             <p>${game.description_raw}</p>
-            <button class="btn btn-primary" onclick="goBack()">Go Back</button>
+            <button class="btn btn-secondary" onclick="goBack()">Go Back</button>
         </div>
     `;
 }
-
 
 // Function to go back to the main page
 function goBack() {
