@@ -58,11 +58,22 @@ body {
   margin-right: 20px;
 }
 
-.game-details {
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  display: flex;
+#game-details {
+  text-align: left;
+  background-color: #262624;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 800px;
+  margin-top: 20px;
+  padding: 20px;
+  display: none;
+  box-shadow: 0 0 10px #0000001a;
+}
+
+.game-details-page img {
+  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
 }
 
 .game-title {

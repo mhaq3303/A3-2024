@@ -86,12 +86,24 @@ $custom-text-color: #c6c6c6;
   object-fit: cover;
 }
 
-.game-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align text to the left */
-  width: 100%;
+#game-details {
+  background-color: #262624;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 80%;
+  max-width: 800px;
+  text-align: left; /* Align text to the left */
+  display: none; /* Hide by default, shown when a game is clicked */
+  margin-top: 20px;
 }
+
+.game-details-page img {
+  max-width: 100%; /* Ensures the image will not exceed the width of its container */
+  height: auto; /* Maintains the aspect ratio */
+  border-radius: 5px; /* Optional: adds rounded corners to the image */
+}
+
 
 .game-title {
   font-size: 18px;

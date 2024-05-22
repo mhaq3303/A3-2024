@@ -4,18 +4,18 @@ let currentPage = 1;
 let totalPages = 1;
 // Function to call the API
 async function callAPI(page) {
-    fetch(`${baseUrl}&page=${page}`).then((response)=>{
-        if (!response.ok) throw new Error("Network response was not ok " + response.statusText);
-        return response.json();
-    }).then((data)=>{
+    try {
+        const response = await fetch(`${baseUrl}&page=${page}`);
+        if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+        const data = await response.json();
         console.log(data.results); // Log the array of games
         totalPages = Math.ceil(data.count / data.results.length);
         displayGames(data.results);
         currentPage = page; // Update currentPage after successful fetch
         updatePaginationButtons();
-    }).catch((error)=>{
-        console.error("There has been a problem with your fetch operation:", error);
-    });
+    } catch (error) {
+        handleFetchError(error);
+    }
 }
 // Function to display games
 function displayGames(games) {
@@ -27,6 +27,7 @@ function displayGames(games) {
         const gameImage = document.createElement("img");
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
+        gameImage.addEventListener("click", ()=>loadGameDetails(game.id));
         const gameDetails = document.createElement("div");
         gameDetails.className = "game-details";
         const gameTitle = document.createElement("div");
@@ -60,6 +61,52 @@ function updatePaginationButtons() {
         }
     }
 }
+// Function to load game details
+async function loadGameDetails(gameId) {
+    try {
+        console.log(`Loading details for game ID: ${gameId}`); // Debugging
+        const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
+        if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+        const data = await response.json();
+        displayGameDetails(data);
+        history.pushState({
+            gameId
+        }, "", `?game=${gameId}`);
+    } catch (error) {
+        handleFetchError(error);
+    }
+}
+// Function to handle fetch errors
+function handleFetchError(error) {
+    if (error.message.includes("67ee4b4236c76bdd")) console.warn("Ignoring content key error:", error.message);
+    else console.error("There has been a problem with your fetch operation:", error);
+}
+// Function to display game details
+function displayGameDetails(game) {
+    const gamesContainer = document.getElementById("games");
+    const gameDetailsContainer = document.getElementById("game-details");
+    gamesContainer.style.display = "none";
+    gameDetailsContainer.style.display = "block";
+    gameDetailsContainer.innerHTML = `
+        <div class="game-details-page">
+            <h2>${game.name}</h2>
+            <img src="${game.background_image}" alt="${game.name} cover image" />
+            <p><strong>Released:</strong> ${game.released}</p>
+            <p><strong>Available Platforms:</strong> ${game.platforms.map((p)=>p.platform.name).join(", ")}</p>
+            <p><strong>Genres:</strong> ${game.genres.map((g)=>g.name).join(", ")}</p>
+            <p>${game.description_raw}</p>
+            <button class="btn btn-primary" onclick="goBack()">Go Back</button>
+        </div>
+    `;
+}
+// Function to go back to the main page
+function goBack() {
+    const gamesContainer = document.getElementById("games");
+    const gameDetailsContainer = document.getElementById("game-details");
+    gamesContainer.style.display = "block";
+    gameDetailsContainer.style.display = "none";
+    history.pushState({}, "", "./");
+}
 document.addEventListener("DOMContentLoaded", ()=>{
     // Event listeners for pagination buttons
     for(let i = 1; i <= 8; i++){
@@ -85,7 +132,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
         baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2023-12-31&platforms=18,1,7`;
         callAPI(1); // Reset to page 1 when changing decades
     });
-    // Initial API call
+    // Handle browser back/forward buttons
+    window.addEventListener("popstate", (event)=>{
+        if (event.state && event.state.gameId) loadGameDetails(event.state.gameId);
+        else goBack();
+    });
+    // Check if URL has game query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get("game");
+    if (gameId) loadGameDetails(gameId);
+    else // Initial API call
     callAPI(currentPage);
 });
 
