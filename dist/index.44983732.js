@@ -1,11 +1,14 @@
 const apiKey = "91574a6ba1164bd5a7cb766c4251213b";
-let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}`;
 let currentPage = 1;
 let totalPages = 1;
 // Function to call the API
-async function callAPI(page) {
+async function callAPI(page, query = "") {
+    let url = `${baseUrl}&page=${page}`;
+    if (query) url += `&search=${query}`;
+    else url += "&dates=2010-01-01,2019-12-31&platforms=18,1,7";
     try {
-        const response = await fetch(`${baseUrl}&page=${page}`);
+        const response = await fetch(url);
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
         const data = await response.json();
         console.log(data.results); // Log the array of games
@@ -14,7 +17,7 @@ async function callAPI(page) {
         currentPage = page; // Update currentPage after successful fetch
         updatePaginationButtons();
     } catch (error) {
-        handleFetchError(error);
+        console.error("There has been a problem with your fetch operation:", error);
     }
 }
 // Function to display games
@@ -42,10 +45,25 @@ function displayGames(games) {
         const gameGenres = document.createElement("div");
         gameGenres.className = "game-genres";
         gameGenres.textContent = `Genres: ${game.genres.map((g)=>g.name).join(", ")}`;
+        const developers = game.developers ? game.developers.map((dev)=>dev.name).join(", ") : "N/A";
+        const publishers = game.publishers ? game.publishers.map((pub)=>pub.name).join(", ") : "N/A";
+        const metascore = game.metacritic !== null ? game.metacritic : "N/A";
+        const gameDevelopers = document.createElement("div");
+        gameDevelopers.className = "game-developers";
+        gameDevelopers.textContent = `Developers: ${developers}`;
+        const gamePublishers = document.createElement("div");
+        gamePublishers.className = "game-publishers";
+        gamePublishers.textContent = `Publishers: ${publishers}`;
+        const gameMetascore = document.createElement("div");
+        gameMetascore.className = "game-metascore";
+        gameMetascore.textContent = `Metascore: ${metascore}`;
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
+        gameDetails.appendChild(gameDevelopers);
+        gameDetails.appendChild(gamePublishers);
+        gameDetails.appendChild(gameMetascore);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
@@ -73,22 +91,18 @@ async function loadGameDetails(gameId) {
             gameId
         }, "", `?game=${gameId}`);
     } catch (error) {
-        handleFetchError(error);
+        console.error("There has been a problem with your fetch operation:", error);
     }
 }
-// Function to handle fetch errors
-function handleFetchError(error) {
-    if (error.message.includes("67ee4b4236c76bdd")) console.warn("Ignoring content key error:", error.message);
-    else console.error("There has been a problem with your fetch operation:", error);
-}
+// Function to display game details
 function displayGameDetails(game) {
     const gamesContainer = document.getElementById("games");
     const gameDetailsContainer = document.getElementById("game-details");
     gamesContainer.style.display = "none";
     gameDetailsContainer.style.display = "block";
-    const developers = game.developers.map((dev)=>dev.name).join(", ");
-    const publishers = game.publishers.map((pub)=>pub.name).join(", ");
-    const metascore = game.metacritic;
+    const developers = game.developers ? game.developers.map((dev)=>dev.name).join(", ") : "N/A";
+    const publishers = game.publishers ? game.publishers.map((pub)=>pub.name).join(", ") : "N/A";
+    const metascore = game.metacritic !== null ? game.metacritic : "N/A";
     gameDetailsContainer.innerHTML = `
         <div class="game-details-page">
             <h2>${game.name}</h2>
@@ -112,6 +126,12 @@ function goBack() {
     gameDetailsContainer.style.display = "none";
     history.pushState({}, "", "./");
 }
+// Event listener for the search form
+document.getElementById("searchForm").addEventListener("submit", (event)=>{
+    event.preventDefault(); // Prevent default form submission
+    const query = document.getElementById("searchInput").value;
+    callAPI(1, query); // Reset to page 1 when performing a new search
+});
 document.addEventListener("DOMContentLoaded", ()=>{
     // Event listeners for pagination buttons
     for(let i = 1; i <= 8; i++){
