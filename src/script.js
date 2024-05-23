@@ -3,6 +3,7 @@ let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019
 let currentPage = 1;
 let totalPages = 1;
 let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
+let backloggedGames = JSON.parse(localStorage.getItem('backloggedGames')) || [];
 
 // Function to call the API
 async function callAPI(page, query = '') {
@@ -136,8 +137,7 @@ function displayGameDetails(game) {
     });
 
     document.getElementById('markBacklogged').addEventListener('click', () => {
-        alert('Game marked as backlogged.');
-        // Add any additional functionality here
+        markAsBacklogged(game);
     });
 }
 
@@ -152,23 +152,49 @@ function markAsCompleted(game) {
     }
 }
 
+// Function to mark a game as backlogged
+function markAsBacklogged(game) {
+    if (!backloggedGames.some(g => g.id === game.id)) {
+        backloggedGames.push(game);
+        localStorage.setItem('backloggedGames', JSON.stringify(backloggedGames));
+        alert('Game marked as backlogged.');
+    } else {
+        alert('Game is already marked as backlogged.');
+    }
+}
+
 // Function to display the profile page
 function displayProfilePage() {
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
     const profilePageContainer = document.getElementById('profile-page');
+    const profileGamesContainer = document.getElementById('profile-games');
+    const decadeDropdown = document.getElementById('decadeDropdown');
+    const profileDropdown = document.getElementById('profileDropdown');
+
     gamesContainer.style.display = 'none';
     gameDetailsContainer.style.display = 'none';
     profilePageContainer.style.display = 'block';
+    decadeDropdown.style.display = 'none';
+    profileDropdown.style.display = 'block';
+    profileGamesContainer.innerHTML = ''; // Clear previous results
+    displayCompletedGames(); // Default to completed games
 
-    profilePageContainer.innerHTML = `
-        <h2>Completed Games</h2>
-        <div id="completed-games"></div>
-        <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
-    `;
+    document.getElementById('view-completed').addEventListener('click', (event) => {
+        event.preventDefault();
+        displayCompletedGames();
+    });
 
-    const completedGamesContainer = document.getElementById('completed-games');
-    completedGamesContainer.innerHTML = ''; // Clear previous results
+    document.getElementById('view-backlogged').addEventListener('click', (event) => {
+        event.preventDefault();
+        displayBackloggedGames();
+    });
+}
+
+// Function to display completed games
+function displayCompletedGames() {
+    const profileGamesContainer = document.getElementById('profile-games');
+    profileGamesContainer.innerHTML = ''; // Clear previous results
     completedGames.forEach(game => {
         const gameElement = document.createElement('div');
         gameElement.className = 'game';
@@ -202,7 +228,48 @@ function displayProfilePage() {
         gameDetails.appendChild(gameGenres);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
-        completedGamesContainer.appendChild(gameElement);
+        profileGamesContainer.appendChild(gameElement);
+    });
+}
+
+// Function to display backlogged games
+function displayBackloggedGames() {
+    const profileGamesContainer = document.getElementById('profile-games');
+    profileGamesContainer.innerHTML = ''; // Clear previous results
+    backloggedGames.forEach(game => {
+        const gameElement = document.createElement('div');
+        gameElement.className = 'game';
+
+        const gameImage = document.createElement('img');
+        gameImage.src = game.background_image;
+        gameImage.alt = `${game.name} cover image`;
+
+        const gameDetails = document.createElement('div');
+        gameDetails.className = 'game-details';
+
+        const gameTitle = document.createElement('div');
+        gameTitle.className = 'game-title';
+        gameTitle.textContent = game.name;
+
+        const gameReleaseDate = document.createElement('div');
+        gameReleaseDate.className = 'game-release-date';
+        gameReleaseDate.textContent = `Released: ${game.released}`;
+
+        const gamePlatforms = document.createElement('div');
+        gamePlatforms.className = 'game-platforms';
+        gamePlatforms.textContent = `Available Platforms: ${game.platforms.map(p => p.platform.name).join(', ')}`;
+
+        const gameGenres = document.createElement('div');
+        gameGenres.className = 'game-genres';
+        gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
+
+        gameDetails.appendChild(gameTitle);
+        gameDetails.appendChild(gameReleaseDate);
+        gameDetails.appendChild(gamePlatforms);
+        gameDetails.appendChild(gameGenres);
+        gameElement.appendChild(gameImage);
+        gameElement.appendChild(gameDetails);
+        profileGamesContainer.appendChild(gameElement);
     });
 }
 
@@ -211,9 +278,14 @@ function goBack() {
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
     const profilePageContainer = document.getElementById('profile-page');
+    const decadeDropdown = document.getElementById('decadeDropdown');
+    const profileDropdown = document.getElementById('profileDropdown');
+
     gamesContainer.style.display = 'block';
     gameDetailsContainer.style.display = 'none';
     profilePageContainer.style.display = 'none';
+    decadeDropdown.style.display = 'block';
+    profileDropdown.style.display = 'none';
     history.pushState({}, '', './');
 }
 
@@ -258,6 +330,12 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // Prevent default behavior
         baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2023-12-31&platforms=18,1,7`;
         callAPI(1); // Reset to page 1 when changing decades
+    });
+
+    document.getElementById('all-decades').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default behavior
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18,1,7`;
+        callAPI(1); // Reset to page 1 when selecting all decades
     });
 
     // Handle browser back/forward buttons

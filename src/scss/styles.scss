@@ -175,3 +175,21 @@ $custom-text-color: #c6c6c6;
   height: auto; /* Maintains the aspect ratio */
   border-radius: 5px; /* Optional: adds rounded corners to the image */
 }
+
+/* Navbar button styles */
+.navbar .btn-outline-success, .navbar .btn-outline-info {
+  color: $custom-text-color;
+  border-color: $custom-text-color;
+
+  &:hover,
+  &:focus {
+    color: $dropdown-hover-text;
+    background-color: $pagination-hover-bg;
+    border-color: $pagination-hover-bg;
+  }
+}
+
+/* Optional: additional styling for consistency */
+.navbar .btn-outline-success:focus, .navbar .btn-outline-info:focus {
+  box-shadow: 0 0 0 0.2rem rgba(94, 55, 135, 0.5);
+}

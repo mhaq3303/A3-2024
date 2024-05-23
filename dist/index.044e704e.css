@@ -148,4 +148,19 @@ body {
   max-width: 100%;
   height: auto;
 }
+
+.navbar .btn-outline-success, .navbar .btn-outline-info {
+  color: #c6c6c6;
+  border-color: #c6c6c6;
+}
+
+.navbar .btn-outline-success:hover, .navbar .btn-outline-success:focus, .navbar .btn-outline-info:hover, .navbar .btn-outline-info:focus {
+  color: #434143;
+  background-color: #5e3787;
+  border-color: #5e3787;
+}
+
+.navbar .btn-outline-success:focus, .navbar .btn-outline-info:focus {
+  box-shadow: 0 0 0 .2rem #5e378780;
+}
 /*# sourceMappingURL=index.044e704e.css.map */

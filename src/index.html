@@ -17,7 +17,8 @@
     <button class="btn btn-outline-info ms-2" id="profileButton">Profile</button>
   </nav>
   <div id="game-container">
-    <div class="dropdown" style="position: absolute; top: 20px; left: 20px;">
+    <!-- Decade dropdown -->
+    <div class="dropdown" id="decadeDropdown" style="position: absolute; top: 20px; left: 20px;">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
         Select Decade
       </button>
@@ -25,12 +26,27 @@
         <li><a class="dropdown-item" id="decade-2000" href="#">2000-2009</a></li>
         <li><a class="dropdown-item" id="decade-2010" href="#">2010-2019</a></li>
         <li><a class="dropdown-item" id="decade-2020" href="#">2020-2023</a></li>
+        <li><a class="dropdown-item" id="all-decades" href="#">All Decades</a></li>
       </ul>
     </div>
+
+    <!-- Profile games dropdown -->
+    <div class="dropdown" id="profileDropdown" style="position: absolute; top: 20px; left: 20px; display: none;">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="profileGamesDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
+        Select Games
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="profileGamesDropdownButton">
+        <li><a class="dropdown-item" id="view-completed" href="#">Completed Games</a></li>
+        <li><a class="dropdown-item" id="view-backlogged" href="#">Backlogged Games</a></li>
+      </ul>
+    </div>
+
     <h1><b>Game List</b></h1>
     <div id="games"></div>
     <div id="game-details" style="display: none;"></div>
-    <div id="profile-page" style="display: none;"></div>
+    <div id="profile-page" style="display: none;">
+      <div id="profile-games"></div>
+    </div>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center" id="pagination">
         <li class="page-item"><button class="page-link" id="page-1">1</button></li>
