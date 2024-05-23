@@ -60,29 +60,10 @@ function displayGames(games) {
         gameGenres.className = 'game-genres';
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
-        const developers = game.developers ? game.developers.map(dev => dev.name).join(', ') : 'N/A';
-        const publishers = game.publishers ? game.publishers.map(pub => pub.name).join(', ') : 'N/A';
-        const metascore = game.metacritic !== null ? game.metacritic : 'N/A';
-
-        const gameDevelopers = document.createElement('div');
-        gameDevelopers.className = 'game-developers';
-        gameDevelopers.textContent = `Developers: ${developers}`;
-
-        const gamePublishers = document.createElement('div');
-        gamePublishers.className = 'game-publishers';
-        gamePublishers.textContent = `Publishers: ${publishers}`;
-
-        const gameMetascore = document.createElement('div');
-        gameMetascore.className = 'game-metascore';
-        gameMetascore.textContent = `Metascore: ${metascore}`;
-
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
-        gameDetails.appendChild(gameDevelopers);
-        gameDetails.appendChild(gamePublishers);
-        gameDetails.appendChild(gameMetascore);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
@@ -138,9 +119,28 @@ function displayGameDetails(game) {
             <p><strong>Publishers:</strong> ${publishers}</p>
             <p><strong>Metascore:</strong> ${metascore}</p>
             <p>${game.description_raw}</p>
-            <button class="btn btn-secondary" onclick="goBack()">Go Back</button>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Mark as
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                    <li><a class="dropdown-item" href="#" id="markCompleted">Completed</a></li>
+                    <li><a class="dropdown-item" href="#" id="markBacklogged">Backlogged</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
         </div>
     `;
+
+    document.getElementById('markCompleted').addEventListener('click', () => {
+        alert('Game marked as completed.');
+        // Add any additional functionality here
+    });
+
+    document.getElementById('markBacklogged').addEventListener('click', () => {
+        alert('Game marked as backlogged.');
+        // Add any additional functionality here
+    });
 }
 
 // Function to go back to the main page
