@@ -4,4 +4,12 @@ This is my final assignment for DECO2017 A3.
 # Setup Instructions
 
 # Where was ChatGPT used?
-ChatGPT was used quite often in this assignment. Particularly, API handling code created by ChatGPT. This would include the API error checking functions. ChatGPT also assisted in fixing the pagination buttons and having it access the API further. I also used it for the SCSS towards the end of the project, so that it'd be faster to just copy and paste the CSS chunk rather than finding each individual part & adding a line or two of CSS. Apart from this,  it was mainly used for error checking.
+Prompt: how could i use a searchbar in bootstraps navbar to search for specific games in the api
+Result:
+To implement a search bar in the Bootstrap navbar that allows users to search for specific games using the RAWG API, you can follow these steps:
+
+    Add a search bar to the navbar in your HTML.
+    Capture the search input and query the API.
+    Display the search results.
+
+Line 15 HTML. Line 293-297 script.js
