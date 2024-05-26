@@ -39,7 +39,7 @@ function displayGames(games) {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener('click', () => loadGameDetails(game.id));
+        gameImage.addEventListener('click', () => loadGameDetails(game.id)); // Add event listener to load game details
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -60,15 +60,38 @@ function displayGames(games) {
         gameGenres.className = 'game-genres';
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
+        const markAsCompletedButton = document.createElement('button');
+        markAsCompletedButton.className = 'btn-completed';
+        markAsCompletedButton.textContent = 'Mark as Completed';
+        markAsCompletedButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            markAsCompleted(game);
+            alert('Game marked as completed.');
+        });
+
+        const markAsBackloggedButton = document.createElement('button');
+        markAsBackloggedButton.className = 'btn-backlogged';
+        markAsBackloggedButton.textContent = 'Mark as Backlogged';
+        markAsBackloggedButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            markAsBacklogged(game);
+            alert('Game marked as backlogged.');
+        });
+
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
+        gameDetails.appendChild(markAsCompletedButton);
+        gameDetails.appendChild(markAsBackloggedButton);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
     });
 }
+
+
+
 
 // Function to update pagination buttons
 function updatePaginationButtons() {
@@ -82,71 +105,67 @@ function updatePaginationButtons() {
 }
 
 // Function to load game details
-async function loadGameDetails(gameId) {
+async function loadGameDetails(gameId, fromProfile = false, profileSection = '') {
+    const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : '';
+    window.location.href = `?game=${gameId}${profileParam}`;
+}
+
+
+
+
+// Function to display game details
+async function displayGameDetails(gameId) {
+    const gamesContainer = document.getElementById('games');
+    const gameDetailsContainer = document.getElementById('game-details');
+    const profilePageContainer = document.getElementById('profile-page');
+    const decadeDropdown = document.getElementById('decadeDropdown');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
+
+    gamesContainer.style.display = 'none';
+    gameDetailsContainer.style.display = 'block';
+    profilePageContainer.style.display = 'none';
+    decadeDropdown.style.display = 'none';
+    profileDropdown.style.display = 'none';
+    gameListTitle.style.display = 'none'; // Hide the game list title
+
     try {
-        console.log(`Loading details for game ID: ${gameId}`); // Debugging
         const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-        const data = await response.json();
-        displayGameDetails(data);
-        history.pushState({ gameId }, '', `?game=${gameId}`);
+        const game = await response.json();
+
+        const developers = game.developers ? game.developers.map(dev => dev.name).join(', ') : 'N/A';
+        const publishers = game.publishers ? game.publishers.map(pub => pub.name).join(', ') : 'N/A';
+        const metascore = game.metacritic !== null ? game.metacritic : 'N/A';
+
+        gameDetailsContainer.innerHTML = `
+            <div class="game-details-page">
+                <h2>${game.name}</h2>
+                <img src="${game.background_image}" alt="${game.name} cover image" />
+                <p><strong>Released:</strong> ${game.released}</p>
+                <p><strong>Available Platforms:</strong> ${game.platforms.map(p => p.platform.name).join(', ')}</p>
+                <p><strong>Genres:</strong> ${game.genres.map(g => g.name).join(', ')}</p>
+                <p><strong>Developers:</strong> ${developers}</p>
+                <p><strong>Publishers:</strong> ${publishers}</p>
+                <p><strong>Metascore:</strong> ${metascore}</p>
+                <p>${game.description_raw}</p>
+                <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
+            </div>
+        `;
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
     }
 }
 
-// Function to display game details
-function displayGameDetails(game) {
-    const gamesContainer = document.getElementById('games');
-    const gameDetailsContainer = document.getElementById('game-details');
-    gamesContainer.style.display = 'none';
-    gameDetailsContainer.style.display = 'block';
 
-    const developers = game.developers ? game.developers.map(dev => dev.name).join(', ') : 'N/A';
-    const publishers = game.publishers ? game.publishers.map(pub => pub.name).join(', ') : 'N/A';
-    const metascore = game.metacritic !== null ? game.metacritic : 'N/A';
-
-    gameDetailsContainer.innerHTML = `
-        <div class="game-details-page">
-            <h2>${game.name}</h2>
-            <img src="${game.background_image}" alt="${game.name} cover image" />
-            <p><strong>Released:</strong> ${game.released}</p>
-            <p><strong>Available Platforms:</strong> ${game.platforms.map(p => p.platform.name).join(', ')}</p>
-            <p><strong>Genres:</strong> ${game.genres.map(g => g.name).join(', ')}</p>
-            <p><strong>Developers:</strong> ${developers}</p>
-            <p><strong>Publishers:</strong> ${publishers}</p>
-            <p><strong>Metascore:</strong> ${metascore}</p>
-            <p>${game.description_raw}</p>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Mark as
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="statusDropdown">
-                    <li><a class="dropdown-item" href="#" id="markCompleted">Completed</a></li>
-                    <li><a class="dropdown-item" href="#" id="markBacklogged">Backlogged</a></li>
-                </ul>
-            </div>
-            <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
-        </div>
-    `;
-
-    document.getElementById('markCompleted').addEventListener('click', () => {
-        markAsCompleted(game);
-    });
-
-    document.getElementById('markBacklogged').addEventListener('click', () => {
-        markAsBacklogged(game);
-    });
-}
-
+// Function to mark a game as completed
 // Function to mark a game as completed
 function markAsCompleted(game) {
     if (!completedGames.some(g => g.id === game.id)) {
         completedGames.push(game);
         localStorage.setItem('completedGames', JSON.stringify(completedGames));
-        alert('Game marked as completed.');
     } else {
         alert('Game is already marked as completed.');
     }
@@ -157,11 +176,11 @@ function markAsBacklogged(game) {
     if (!backloggedGames.some(g => g.id === game.id)) {
         backloggedGames.push(game);
         localStorage.setItem('backloggedGames', JSON.stringify(backloggedGames));
-        alert('Game marked as backlogged.');
     } else {
         alert('Game is already marked as backlogged.');
     }
 }
+
 
 // Function to display the profile page
 function displayProfilePage() {
@@ -202,6 +221,7 @@ function displayCompletedGames() {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
+        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'completed')); // Pass profileSection=completed
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -232,7 +252,7 @@ function displayCompletedGames() {
     });
 }
 
-// Function to display backlogged games
+
 function displayBackloggedGames() {
     const profileGamesContainer = document.getElementById('profile-games');
     profileGamesContainer.innerHTML = ''; // Clear previous results
@@ -243,6 +263,7 @@ function displayBackloggedGames() {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
+        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'backlogged')); // Pass profileSection=backlogged
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -273,21 +294,58 @@ function displayBackloggedGames() {
     });
 }
 
+
+
+
 // Function to go back to the main page
 function goBack() {
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
     const profilePageContainer = document.getElementById('profile-page');
+    const profileGamesContainer = document.getElementById('profile-games');
     const decadeDropdown = document.getElementById('decadeDropdown');
     const profileDropdown = document.getElementById('profileDropdown');
+    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
 
-    gamesContainer.style.display = 'block';
-    gameDetailsContainer.style.display = 'none';
-    profilePageContainer.style.display = 'none';
-    decadeDropdown.style.display = 'block';
-    profileDropdown.style.display = 'none';
-    history.pushState({}, '', './');
+    // Check if the user was on the profile page
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromProfile = urlParams.get('fromProfile');
+    const profileSection = urlParams.get('profileSection');
+
+    if (fromProfile) {
+        // If the user came from the profile page
+        gamesContainer.style.display = 'none';
+        profilePageContainer.style.display = 'block';
+        profileDropdown.style.display = 'block';
+        decadeDropdown.style.display = 'none';
+        gameDetailsContainer.style.display = 'none';
+        gameListTitle.style.display = 'block'; // Show the game list title
+
+        if (profileSection === 'completed') {
+            displayCompletedGames();
+            history.pushState({}, '', '?fromProfile=true&profileSection=completed');
+        } else if (profileSection === 'backlogged') {
+            displayBackloggedGames();
+            history.pushState({}, '', '?fromProfile=true&profileSection=backlogged');
+        }
+    } else {
+        // Default behavior: go back to the main page and default to "all decades"
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18,1,7`;
+        callAPI(1); // Load games with "all decades" option
+
+        gamesContainer.style.display = 'block';
+        profilePageContainer.style.display = 'none';
+        gameDetailsContainer.style.display = 'none';
+        decadeDropdown.style.display = 'block';
+        profileDropdown.style.display = 'none';
+        gameListTitle.style.display = 'block'; // Show the game list title
+        history.pushState({}, '', './');
+    }
 }
+
+
+
+
 
 // Event listener for the search form
 document.getElementById('searchForm').addEventListener('submit', (event) => {
@@ -341,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.gameId) {
-            loadGameDetails(event.state.gameId);
+            displayGameDetails(event.state.gameId);
         } else {
             goBack();
         }
@@ -350,10 +408,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if URL has game query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const gameId = urlParams.get('game');
+    const fromProfile = urlParams.get('fromProfile');
+    const profileSection = urlParams.get('profileSection');
+
     if (gameId) {
-        loadGameDetails(gameId);
+        displayGameDetails(gameId);
+    } else if (fromProfile) {
+        goBack();
     } else {
         // Initial API call
         callAPI(currentPage);
     }
 });
+
+
