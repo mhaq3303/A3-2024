@@ -39,7 +39,7 @@ function displayGames(games) {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener('click', () => loadGameDetails(game.id)); // Add event listener to load game details
+        gameImage.addEventListener('click', () => loadGameDetails(game.id));
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -82,60 +82,64 @@ function updatePaginationButtons() {
 }
 
 // Function to load game details
-async function loadGameDetails(gameId, fromProfile = false, profileSection = '') {
-    const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : '';
-    window.location.href = `?game=${gameId}${profileParam}`;
-}
-
-
-
-
-// Function to display game details
-async function displayGameDetails(gameId) {
-    const gamesContainer = document.getElementById('games');
-    const gameDetailsContainer = document.getElementById('game-details');
-    const profilePageContainer = document.getElementById('profile-page');
-    const decadeDropdown = document.getElementById('decadeDropdown');
-    const profileDropdown = document.getElementById('profileDropdown');
-    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
-
-    gamesContainer.style.display = 'none';
-    gameDetailsContainer.style.display = 'block';
-    profilePageContainer.style.display = 'none';
-    decadeDropdown.style.display = 'none';
-    profileDropdown.style.display = 'none';
-    gameListTitle.style.display = 'none'; // Hide the game list title
-
+async function loadGameDetails(gameId) {
     try {
+        console.log(`Loading details for game ID: ${gameId}`); // Debugging
         const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
         if (!response.ok) {
             throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-        const game = await response.json();
-
-        const developers = game.developers ? game.developers.map(dev => dev.name).join(', ') : 'N/A';
-        const publishers = game.publishers ? game.publishers.map(pub => pub.name).join(', ') : 'N/A';
-        const metascore = game.metacritic !== null ? game.metacritic : 'N/A';
-
-        gameDetailsContainer.innerHTML = `
-            <div class="game-details-page">
-                <h2>${game.name}</h2>
-                <img src="${game.background_image}" alt="${game.name} cover image" />
-                <p><strong>Released:</strong> ${game.released}</p>
-                <p><strong>Available Platforms:</strong> ${game.platforms.map(p => p.platform.name).join(', ')}</p>
-                <p><strong>Genres:</strong> ${game.genres.map(g => g.name).join(', ')}</p>
-                <p><strong>Developers:</strong> ${developers}</p>
-                <p><strong>Publishers:</strong> ${publishers}</p>
-                <p><strong>Metascore:</strong> ${metascore}</p>
-                <p>${game.description_raw}</p>
-                <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
-            </div>
-        `;
+        const data = await response.json();
+        displayGameDetails(data);
+        history.pushState({ gameId }, '', `?game=${gameId}`);
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
     }
 }
 
+// Function to display game details
+function displayGameDetails(game) {
+    const gamesContainer = document.getElementById('games');
+    const gameDetailsContainer = document.getElementById('game-details');
+    gamesContainer.style.display = 'none';
+    gameDetailsContainer.style.display = 'block';
+
+    const developers = game.developers ? game.developers.map(dev => dev.name).join(', ') : 'N/A';
+    const publishers = game.publishers ? game.publishers.map(pub => pub.name).join(', ') : 'N/A';
+    const metascore = game.metacritic !== null ? game.metacritic : 'N/A';
+
+    gameDetailsContainer.innerHTML = `
+        <div class="game-details-page">
+            <h2>${game.name}</h2>
+            <img src="${game.background_image}" alt="${game.name} cover image" />
+            <p><strong>Released:</strong> ${game.released}</p>
+            <p><strong>Available Platforms:</strong> ${game.platforms.map(p => p.platform.name).join(', ')}</p>
+            <p><strong>Genres:</strong> ${game.genres.map(g => g.name).join(', ')}</p>
+            <p><strong>Developers:</strong> ${developers}</p>
+            <p><strong>Publishers:</strong> ${publishers}</p>
+            <p><strong>Metascore:</strong> ${metascore}</p>
+            <p>${game.description_raw}</p>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Mark as
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                    <li><a class="dropdown-item" href="#" id="markCompleted">Completed</a></li>
+                    <li><a class="dropdown-item" href="#" id="markBacklogged">Backlogged</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
+        </div>
+    `;
+
+    document.getElementById('markCompleted').addEventListener('click', () => {
+        markAsCompleted(game);
+    });
+
+    document.getElementById('markBacklogged').addEventListener('click', () => {
+        markAsBacklogged(game);
+    });
+}
 
 // Function to mark a game as completed
 function markAsCompleted(game) {
@@ -198,7 +202,6 @@ function displayCompletedGames() {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'completed')); // Pass profileSection=completed
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -229,7 +232,7 @@ function displayCompletedGames() {
     });
 }
 
-
+// Function to display backlogged games
 function displayBackloggedGames() {
     const profileGamesContainer = document.getElementById('profile-games');
     profileGamesContainer.innerHTML = ''; // Clear previous results
@@ -240,7 +243,6 @@ function displayBackloggedGames() {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'backlogged')); // Pass profileSection=backlogged
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -271,53 +273,21 @@ function displayBackloggedGames() {
     });
 }
 
-
-
-
 // Function to go back to the main page
 function goBack() {
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
     const profilePageContainer = document.getElementById('profile-page');
-    const profileGamesContainer = document.getElementById('profile-games');
     const decadeDropdown = document.getElementById('decadeDropdown');
     const profileDropdown = document.getElementById('profileDropdown');
-    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
 
-    // Check if the user was on the profile page
-    const urlParams = new URLSearchParams(window.location.search);
-    const fromProfile = urlParams.get('fromProfile');
-    const profileSection = urlParams.get('profileSection');
-
-    if (fromProfile) {
-        // If the user came from the profile page
-        gamesContainer.style.display = 'none';
-        profilePageContainer.style.display = 'block';
-        profileDropdown.style.display = 'block';
-        decadeDropdown.style.display = 'none';
-        gameDetailsContainer.style.display = 'none';
-        gameListTitle.style.display = 'block'; // Show the game list title
-
-        if (profileSection === 'completed') {
-            displayCompletedGames();
-        } else if (profileSection === 'backlogged') {
-            displayBackloggedGames();
-        }
-    } else {
-        // Default behavior: go back to the main page
-        gamesContainer.style.display = 'block';
-        profilePageContainer.style.display = 'none';
-        gameDetailsContainer.style.display = 'none';
-        decadeDropdown.style.display = 'block';
-        profileDropdown.style.display = 'none';
-        gameListTitle.style.display = 'block'; // Show the game list title
-        history.pushState({}, '', './');
-    }
+    gamesContainer.style.display = 'block';
+    gameDetailsContainer.style.display = 'none';
+    profilePageContainer.style.display = 'none';
+    decadeDropdown.style.display = 'block';
+    profileDropdown.style.display = 'none';
+    history.pushState({}, '', './');
 }
-
-
-
-
 
 // Event listener for the search form
 document.getElementById('searchForm').addEventListener('submit', (event) => {
@@ -371,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
         if (event.state && event.state.gameId) {
-            displayGameDetails(event.state.gameId);
+            loadGameDetails(event.state.gameId);
         } else {
             goBack();
         }
@@ -380,16 +350,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if URL has game query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const gameId = urlParams.get('game');
-    const fromProfile = urlParams.get('fromProfile');
-    const profileSection = urlParams.get('profileSection');
-
     if (gameId) {
-        displayGameDetails(gameId);
-    } else if (fromProfile) {
-        goBack();
+        loadGameDetails(gameId);
     } else {
         // Initial API call
         callAPI(currentPage);
     }
 });
-
