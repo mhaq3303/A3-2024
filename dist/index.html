@@ -16,7 +16,7 @@
     </form>
     <button class="btn btn-outline-info ms-2" id="profileButton">Profile</button>
   </nav>
-  <div id="game-container">
+  <div id="game-container" style="position: relative">
     <!-- Decade dropdown -->
     <div class="dropdown" id="decadeDropdown" style="position: absolute; top: 20px; left: 20px">
       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -30,16 +30,32 @@
       </ul>
     </div>
 
-    <!-- Profile games dropdown -->
-    <div class="dropdown" id="profileDropdown" style="display: none; position: absolute; top: 20px; left: 20px">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="profileGamesDropdownButton" data-bs-toggle="dropdown" aria-expanded="false">
-        Select Games
+    <!-- Filter dropdown -->
+    <div class="dropdown" id="filterDropdown" style="position: absolute; top: 20px; left: 150px">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="filterMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+        Filter
       </button>
-      <ul class="dropdown-menu" aria-labelledby="profileGamesDropdownButton">
-        <li><a class="dropdown-item" id="view-completed" href="#">Completed Games</a></li>
-        <li><a class="dropdown-item" id="view-backlogged" href="#">Backlogged Games</a></li>
+      <ul class="dropdown-menu" aria-labelledby="filterMenuButton">
+        <li class="dropdown-header">Select Platform</li>
+        <li><a class="dropdown-item" id="platform-pc" href="#">PC</a></li>
+        <li><a class="dropdown-item" id="platform-playstation" href="#">PlayStation</a></li>
+        <li><a class="dropdown-item" id="platform-xbox" href="#">Xbox</a></li>
+        <li><a class="dropdown-item" id="platform-nintendo" href="#">Nintendo</a></li>
+        <li><a class="dropdown-item" id="platform-all" href="#">All Platforms</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Select Genre</li>
+        <li><a class="dropdown-item" id="genre-action" href="#">Action</a></li>
+        <li><a class="dropdown-item" id="genre-adventure" href="#">Adventure</a></li>
+        <li><a class="dropdown-item" id="genre-rpg" href="#">RPG</a></li>
+        <li><a class="dropdown-item" id="genre-strategy" href="#">Strategy</a></li>
+        <li><a class="dropdown-item" id="genre-all" href="#">All Genres</a></li>
       </ul>
     </div>
+
+    <!-- Clear Filters button -->
+    <button class="btn btn-outline-danger" id="clearFiltersButton" style="position: absolute; top: 20px; right: 20px">
+      Clear Filters
+    </button>
 
     <h1 id="gameListTitle"><b>Game List</b></h1> <!-- Added ID -->
     <div id="games"></div>

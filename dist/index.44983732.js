@@ -1,5 +1,5 @@
 const apiKey = "91574a6ba1164bd5a7cb766c4251213b";
-let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`; // Set initial baseUrl to default decade
+let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}`;
 let currentPage = 1;
 let totalPages = 1;
 let completedGames = JSON.parse(localStorage.getItem("completedGames")) || [];
@@ -86,21 +86,20 @@ function updatePaginationButtons() {
 // Function to load game details
 async function loadGameDetails(gameId, fromProfile = false, profileSection = "") {
     const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : "";
-    window.location.href = `?game=${gameId}${profileParam}`;
-}
-// Function to display game details
-async function displayGameDetails(gameId) {
+    history.pushState({}, "", `?game=${gameId}${profileParam}`); // Use history.pushState to update the URL without reloading
     const gamesContainer = document.getElementById("games");
     const gameDetailsContainer = document.getElementById("game-details");
     const profilePageContainer = document.getElementById("profile-page");
     const decadeDropdown = document.getElementById("decadeDropdown");
-    const profileDropdown = document.getElementById("profileDropdown");
+    const filterDropdown = document.getElementById("filterDropdown");
+    const clearFiltersButton = document.getElementById("clearFiltersButton");
     const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
     gamesContainer.style.display = "none";
     gameDetailsContainer.style.display = "block";
     profilePageContainer.style.display = "none";
     decadeDropdown.style.display = "none";
-    profileDropdown.style.display = "none";
+    filterDropdown.style.display = "none";
+    clearFiltersButton.style.display = "none";
     gameListTitle.style.display = "none"; // Hide the game list title
     try {
         const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
@@ -128,7 +127,6 @@ async function displayGameDetails(gameId) {
     }
 }
 // Function to mark a game as completed
-// Function to mark a game as completed
 function markAsCompleted(game) {
     if (!completedGames.some((g)=>g.id === game.id)) {
         completedGames.push(game);
@@ -149,26 +147,40 @@ function displayProfilePage() {
     const profilePageContainer = document.getElementById("profile-page");
     const profileGamesContainer = document.getElementById("profile-games");
     const decadeDropdown = document.getElementById("decadeDropdown");
-    const profileDropdown = document.getElementById("profileDropdown");
+    const filterDropdown = document.getElementById("filterDropdown");
+    const clearFiltersButton = document.getElementById("clearFiltersButton");
+    const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
     gamesContainer.style.display = "none";
     gameDetailsContainer.style.display = "none";
     profilePageContainer.style.display = "block";
     decadeDropdown.style.display = "none";
-    profileDropdown.style.display = "block";
-    profileGamesContainer.innerHTML = ""; // Clear previous results
-    displayCompletedGames(); // Default to completed games
-    document.getElementById("view-completed").addEventListener("click", (event)=>{
-        event.preventDefault();
+    filterDropdown.style.display = "none";
+    clearFiltersButton.style.display = "none";
+    gameListTitle.style.display = "none"; // Hide the game list title
+    profileGamesContainer.innerHTML = `
+        <div class="dropdown" id="profileDropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="profileMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Select Category
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="profileMenuButton">
+                <li><a class="dropdown-item" id="completedGames" href="#">Completed Games</a></li>
+                <li><a class="dropdown-item" id="backloggedGames" href="#">Backlogged Games</a></li>
+            </ul>
+        </div>
+        <div id="profile-games-list"></div>
+    `;
+    document.getElementById("completedGames").addEventListener("click", ()=>{
         displayCompletedGames();
+        history.pushState({}, "", "?fromProfile=true&profileSection=completed");
     });
-    document.getElementById("view-backlogged").addEventListener("click", (event)=>{
-        event.preventDefault();
+    document.getElementById("backloggedGames").addEventListener("click", ()=>{
         displayBackloggedGames();
+        history.pushState({}, "", "?fromProfile=true&profileSection=backlogged");
     });
 }
 // Function to display completed games
 function displayCompletedGames() {
-    const profileGamesContainer = document.getElementById("profile-games");
+    const profileGamesContainer = document.getElementById("profile-games-list");
     profileGamesContainer.innerHTML = ""; // Clear previous results
     completedGames.forEach((game)=>{
         const gameElement = document.createElement("div");
@@ -176,7 +188,7 @@ function displayCompletedGames() {
         const gameImage = document.createElement("img");
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener("click", ()=>loadGameDetails(game.id, true, "completed")); // Pass profileSection=completed
+        gameImage.addEventListener("click", ()=>loadGameDetails(game.id, true, "completed")); // Add event listener to load game details
         const gameDetails = document.createElement("div");
         gameDetails.className = "game-details";
         const gameTitle = document.createElement("div");
@@ -200,8 +212,9 @@ function displayCompletedGames() {
         profileGamesContainer.appendChild(gameElement);
     });
 }
+// Function to display backlogged games
 function displayBackloggedGames() {
-    const profileGamesContainer = document.getElementById("profile-games");
+    const profileGamesContainer = document.getElementById("profile-games-list");
     profileGamesContainer.innerHTML = ""; // Clear previous results
     backloggedGames.forEach((game)=>{
         const gameElement = document.createElement("div");
@@ -209,7 +222,7 @@ function displayBackloggedGames() {
         const gameImage = document.createElement("img");
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener("click", ()=>loadGameDetails(game.id, true, "backlogged")); // Pass profileSection=backlogged
+        gameImage.addEventListener("click", ()=>loadGameDetails(game.id, true, "backlogged")); // Add event listener to load game details
         const gameDetails = document.createElement("div");
         gameDetails.className = "game-details";
         const gameTitle = document.createElement("div");
@@ -240,7 +253,8 @@ function goBack() {
     const profilePageContainer = document.getElementById("profile-page");
     const profileGamesContainer = document.getElementById("profile-games");
     const decadeDropdown = document.getElementById("decadeDropdown");
-    const profileDropdown = document.getElementById("profileDropdown");
+    const filterDropdown = document.getElementById("filterDropdown");
+    const clearFiltersButton = document.getElementById("clearFiltersButton");
     const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
     // Check if the user was on the profile page
     const urlParams = new URLSearchParams(window.location.search);
@@ -252,8 +266,10 @@ function goBack() {
         profilePageContainer.style.display = "block";
         profileDropdown.style.display = "block";
         decadeDropdown.style.display = "none";
+        filterDropdown.style.display = "none";
+        clearFiltersButton.style.display = "none";
         gameDetailsContainer.style.display = "none";
-        gameListTitle.style.display = "block"; // Show the game list title
+        gameListTitle.style.display = "none"; // Hide the game list title
         if (profileSection === "completed") {
             displayCompletedGames();
             history.pushState({}, "", "?fromProfile=true&profileSection=completed");
@@ -263,13 +279,14 @@ function goBack() {
         }
     } else {
         // Default behavior: go back to the main page and default to "all decades"
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18,1,7`;
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`;
         callAPI(1); // Load games with "all decades" option
         gamesContainer.style.display = "block";
         profilePageContainer.style.display = "none";
         gameDetailsContainer.style.display = "none";
         decadeDropdown.style.display = "block";
-        profileDropdown.style.display = "none";
+        filterDropdown.style.display = "block";
+        clearFiltersButton.style.display = "block";
         gameListTitle.style.display = "block"; // Show the game list title
         history.pushState({}, "", "./");
     }
@@ -283,6 +300,11 @@ document.getElementById("searchForm").addEventListener("submit", (event)=>{
 document.getElementById("profileButton").addEventListener("click", (event)=>{
     event.preventDefault(); // Prevent default behavior
     displayProfilePage();
+});
+document.getElementById("clearFiltersButton").addEventListener("click", (event)=>{
+    event.preventDefault(); // Prevent default behavior
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // Reset to all platforms
+    callAPI(1); // Reset to page 1 and load all games without filters
 });
 document.addEventListener("DOMContentLoaded", ()=>{
     // Event listeners for pagination buttons
@@ -311,12 +333,66 @@ document.addEventListener("DOMContentLoaded", ()=>{
     });
     document.getElementById("all-decades").addEventListener("click", (event)=>{
         event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18,1,7`;
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // All platforms
         callAPI(1); // Reset to page 1 when selecting all decades
+    });
+    // Event listeners for filter buttons (platforms)
+    document.getElementById("platform-pc").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4`; // PC platform ID
+        callAPI(1);
+    });
+    document.getElementById("platform-playstation").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18`; // PlayStation platform ID
+        callAPI(1);
+    });
+    document.getElementById("platform-xbox").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=1`; // Xbox platform ID
+        callAPI(1);
+    });
+    document.getElementById("platform-nintendo").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=7`; // Nintendo platform ID
+        callAPI(1);
+    });
+    document.getElementById("platform-all").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // All platforms
+        callAPI(1);
+    });
+    // Event listeners for filter buttons (genres)
+    document.getElementById("genre-action").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4`; // Action genre ID
+        callAPI(1);
+    });
+    document.getElementById("genre-adventure").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=3`; // Adventure genre ID
+        callAPI(1);
+    });
+    document.getElementById("genre-rpg").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=5`; // RPG genre ID
+        callAPI(1);
+    });
+    document.getElementById("genre-strategy").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=10`; // Strategy genre ID
+        callAPI(1);
+    });
+    document.getElementById("genre-all").addEventListener("click", (event)=>{
+        event.preventDefault();
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10`; // All genres
+        callAPI(1);
     });
     // Handle browser back/forward buttons
     window.addEventListener("popstate", (event)=>{
-        if (event.state && event.state.gameId) displayGameDetails(event.state.gameId);
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get("game");
+        if (gameId) loadGameDetails(gameId);
         else goBack();
     });
     // Check if URL has game query parameter
@@ -324,10 +400,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const gameId = urlParams.get("game");
     const fromProfile = urlParams.get("fromProfile");
     const profileSection = urlParams.get("profileSection");
-    if (gameId) displayGameDetails(gameId);
+    if (gameId) loadGameDetails(gameId);
     else if (fromProfile) goBack();
     else // Initial API call
-    callAPI(currentPage);
+    callAPI(1); // Ensure it starts with page 1
 });
 
 //# sourceMappingURL=index.44983732.js.map

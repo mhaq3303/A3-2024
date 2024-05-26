@@ -35,6 +35,20 @@ body {
   }
 }
 
+#clearFiltersButton {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#clearFiltersButton:hover {
+  background-color: darkred;
+}
+
+
 /* Define your custom margin value */
 $custom-margin: 20px;
 
@@ -170,16 +184,17 @@ $custom-text-color: #c6c6c6;
 
 /* Dropdown menu styles */
 .dropdown-menu {
-  background-color: $dropdown-bg;
+  background-color: #343a40;
+  color: white;
 }
 
 .dropdown-item {
-  color: $custom-text-color;
+  color: white;
 }
 
-.dropdown-item:hover, .dropdown-item:focus {
-  background-color: $dropdown-hover-bg;
-  color: $dropdown-hover-text;
+.dropdown-item:hover {
+  background-color: #495057;
+  color: white;
 }
 
 /* Dropdown toggle button styles */
