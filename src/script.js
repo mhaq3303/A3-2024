@@ -216,6 +216,7 @@ function displayProfilePage() {
 }
 
 // Function to display completed games
+// Function to display completed games
 function displayCompletedGames() {
     const profileGamesContainer = document.getElementById('profile-games-list');
     profileGamesContainer.innerHTML = ''; // Clear previous results
@@ -247,10 +248,20 @@ function displayCompletedGames() {
         gameGenres.className = 'game-genres';
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
+        // Add remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'btn-remove';
+        removeButton.textContent = 'Remove from Completed';
+        removeButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeGameFromCompleted(game.id);
+        });
+
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
+        gameDetails.appendChild(removeButton);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
@@ -289,15 +300,26 @@ function displayBackloggedGames() {
         gameGenres.className = 'game-genres';
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
+        // Add remove button
+        const removeButton = document.createElement('button');
+        removeButton.className = 'btn-remove';
+        removeButton.textContent = 'Remove from Backlogged';
+        removeButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeGameFromBacklogged(game.id);
+        });
+
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
+        gameDetails.appendChild(removeButton);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
     });
 }
+
 
 // Function to go back to the main page
 function goBack() {
@@ -349,6 +371,21 @@ function goBack() {
     }
 }
 
+// Function to remove game from completed list
+function removeGameFromCompleted(gameId) {
+    completedGames = completedGames.filter(game => game.id !== gameId);
+    localStorage.setItem('completedGames', JSON.stringify(completedGames));
+    displayCompletedGames(); // Refresh the list
+}
+
+// Function to remove game from backlogged list
+function removeGameFromBacklogged(gameId) {
+    backloggedGames = backloggedGames.filter(game => game.id !== gameId);
+    localStorage.setItem('backloggedGames', JSON.stringify(backloggedGames));
+    displayBackloggedGames(); // Refresh the list
+}
+
+
 // Event listener for the search form
 document.getElementById('searchForm').addEventListener('submit', (event) => {
     event.preventDefault(); // Prevent default form submission
@@ -366,6 +403,33 @@ document.getElementById('clearFiltersButton').addEventListener('click', (event) 
     baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // Reset to all platforms
     callAPI(1); // Reset to page 1 and load all games without filters
 });
+
+document.getElementById('homeLink').addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent default behavior
+    
+    // Display main page elements
+    const gamesContainer = document.getElementById('games');
+    const gameDetailsContainer = document.getElementById('game-details');
+    const profilePageContainer = document.getElementById('profile-page');
+    const decadeDropdown = document.getElementById('decadeDropdown');
+    const filterDropdown = document.getElementById('filterDropdown');
+    const clearFiltersButton = document.getElementById('clearFiltersButton');
+    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
+
+    gamesContainer.style.display = 'block';
+    gameDetailsContainer.style.display = 'none';
+    profilePageContainer.style.display = 'none';
+    decadeDropdown.style.display = 'block';
+    filterDropdown.style.display = 'block';
+    clearFiltersButton.style.display = 'block';
+    gameListTitle.style.display = 'block'; // Show the game list title
+
+    // Update URL and call API to load all games
+    history.pushState({}, '', './');
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // Reset baseUrl to default
+    callAPI(1); // Load games with default filters
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Event listeners for pagination buttons

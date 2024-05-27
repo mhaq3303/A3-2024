@@ -49,6 +49,8 @@ body {
 }
 
 
+
+
 /* Define your custom margin value */
 $custom-margin: 20px;
 
@@ -217,6 +219,22 @@ $custom-text-color: #c6c6c6;
 .game-details-page h2 {
   font-weight: bold;
 }
+
+.btn-remove {
+  background-color: #f8d7da; /* Pale red background */
+  color: #721c24; /* Dark red text */
+  border: none;
+  padding: 5px 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.btn-remove:hover {
+  background-color: #f5c6cb; /* Slightly darker pale red */
+}
+
 
 .game-details-page img {
   max-width: 100%; /* Ensures the image will not exceed the width of its container */

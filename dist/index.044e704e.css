@@ -186,6 +186,21 @@ body {
   font-weight: bold;
 }
 
+.btn-remove {
+  color: #721c24;
+  cursor: pointer;
+  background-color: #f8d7da;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.btn-remove:hover {
+  background-color: #f5c6cb;
+}
+
 .game-details-page img {
   border-radius: 5px;
   max-width: 100%;
