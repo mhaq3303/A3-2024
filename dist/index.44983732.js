@@ -108,6 +108,27 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = "")
         const developers = game.developers ? game.developers.map((dev)=>dev.name).join(", ") : "N/A";
         const publishers = game.publishers ? game.publishers.map((pub)=>pub.name).join(", ") : "N/A";
         const metascore = game.metacritic !== null ? game.metacritic : "N/A";
+        // Check if the game is completed
+        const isCompleted = completedGames.some((g)=>g.id === game.id);
+        let ratingHtml = "";
+        if (isCompleted) {
+            const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
+            ratingHtml = `
+                <div class="rating">
+                    <span>Rate this game: </span>
+                    ${[
+                1,
+                2,
+                3,
+                4,
+                5
+            ].map((rating)=>`
+                        <input type="radio" id="star${rating}" name="rating" value="${rating}" ${rating == savedRating ? "checked" : ""} />
+                        <label for="star${rating}" class="rating-star">&#9733;</label>
+                    `).join("")}
+                </div>
+            `;
+        }
         gameDetailsContainer.innerHTML = `
             <div class="game-details-page">
                 <h2>${game.name}</h2>
@@ -119,9 +140,19 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = "")
                 <p><strong>Publishers:</strong> ${publishers}</p>
                 <p><strong>Metascore:</strong> ${metascore}</p>
                 <p>${game.description_raw}</p>
+                ${ratingHtml}
                 <button class="btn btn-secondary mt-2" onclick="goBack()">Go Back</button>
             </div>
         `;
+        if (isCompleted) {
+            const ratingInputs = document.querySelectorAll('input[name="rating"]');
+            ratingInputs.forEach((input)=>{
+                input.addEventListener("change", (event)=>{
+                    localStorage.setItem(`rating-${game.id}`, event.target.value);
+                    alert(`You rated this game ${event.target.value} star${event.target.value > 1 ? "s" : ""}`);
+                });
+            });
+        }
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
     }
@@ -179,7 +210,6 @@ function displayProfilePage() {
     });
 }
 // Function to display completed games
-// Function to display completed games
 function displayCompletedGames() {
     const profileGamesContainer = document.getElementById("profile-games-list");
     profileGamesContainer.innerHTML = ""; // Clear previous results
@@ -212,11 +242,27 @@ function displayCompletedGames() {
             event.stopPropagation();
             removeGameFromCompleted(game.id);
         });
+        // Add rating display
+        const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
+        const ratingDisplay = `
+            <div class="rating-display">
+                ${[
+            1,
+            2,
+            3,
+            4,
+            5
+        ].map((rating)=>`
+                    <span class="rating-star ${rating <= savedRating ? "rated" : ""}">&#9733;</span>
+                `).join("")}
+            </div>
+        `;
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
         gameDetails.appendChild(removeButton);
+        gameDetails.insertAdjacentHTML("beforeend", ratingDisplay);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);

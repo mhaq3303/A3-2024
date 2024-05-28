@@ -16,13 +16,71 @@ $dropdown-hover-text: #434143;
 /* Custom styles for dark black background */
 body {
   font-family: 'Raleway', sans-serif;
-  background-color: $black;
+  background-color: #171717;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Ensures the body takes the full viewport height */
   margin: 0; /* Removes default margin */
 }
+
+.navbar {
+  background-color: #0d081c !important;
+  padding: 0 10px;
+}
+
+.navbar-brand,
+.navbar-nav a {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 1000;
+  font-size: 30px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.rating span {
+  margin-right: 10px;
+}
+
+.rating input[type="radio"] {
+  display: none;
+}
+
+.rating label.rating-star {
+  font-size: 1.5em;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.rating input[type="radio"]:checked ~ label.rating-star,
+.rating input[type="radio"]:checked ~ label.rating-star ~ label.rating-star {
+  color: #f5b301;
+}
+
+.rating label.rating-star:hover,
+.rating label.rating-star:hover ~ label.rating-star {
+  color: #f5b301;
+}
+
+.rating-display {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.rating-display .rating-star {
+  font-size: 1.5em;
+  color: #ddd;
+}
+
+.rating-display .rating-star.rated {
+  color: #f5b301;
+}
+
 
 /* Additional styles for purple accenting */
 .btn-primary, .btn-secondary {
@@ -68,7 +126,7 @@ $custom-text-color: #c6c6c6;
 }
 
 #game-container {
-  background-color: #262624;
+  background-color: #0c0d0d;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
