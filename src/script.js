@@ -34,7 +34,6 @@ async function callAPI(page, query = '') {
 }
 
 // Function to display games
-// Function to display games
 function displayGames(games) {
     const gamesContainer = document.getElementById('games');
     gamesContainer.innerHTML = ''; // Clear previous results
@@ -101,19 +100,67 @@ function displayGames(games) {
     });
 }
 
-
 // Function to update pagination buttons
 function updatePaginationButtons() {
-    for (let i = 1; i <= 8; i++) { // Assuming you have 8 buttons
-        const button = document.getElementById(`page-${i}`);
-        if (button) {
-            button.disabled = (i === currentPage);
-            button.style.display = i <= totalPages ? 'inline-block' : 'none'; // Show only the necessary buttons
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = ''; // Clear previous buttons
+
+    // Number of buttons to show at a time
+    const maxButtons = 10;
+    const halfMaxButtons = Math.floor(maxButtons / 2);
+
+    // Calculate the start and end of the button range
+    let startPage = currentPage - halfMaxButtons;
+    let endPage = currentPage + halfMaxButtons;
+
+    if (startPage < 1) {
+        startPage = 1;
+        endPage = Math.min(maxButtons, totalPages);
+    } else if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, totalPages - maxButtons + 1);
+    }
+
+    // Create "Previous" button
+    if (currentPage > 1) {
+        const prevButton = document.createElement('li');
+        prevButton.className = 'page-item';
+        prevButton.innerHTML = `<button class="page-link">Previous</button>`;
+        prevButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            callAPI(currentPage - 1);
+        });
+        pagination.appendChild(prevButton);
+    }
+
+    // Create page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+        const button = document.createElement('li');
+        button.className = 'page-item';
+        if (i === currentPage) {
+            button.classList.add('active');
         }
+        button.innerHTML = `<button class="page-link">${i}</button>`;
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            callAPI(i);
+        });
+        pagination.appendChild(button);
+    }
+
+    // Create "Next" button
+    if (currentPage < totalPages) {
+        const nextButton = document.createElement('li');
+        nextButton.className = 'page-item';
+        nextButton.innerHTML = `<button class="page-link">Next</button>`;
+        nextButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            callAPI(currentPage + 1);
+        });
+        pagination.appendChild(nextButton);
     }
 }
 
-// Function to load game details
 // Function to load game details
 async function loadGameDetails(gameId, fromProfile = false, profileSection = '') {
     const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : '';
@@ -611,172 +658,233 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Event listener for Clear Filters button
-    document.getElementById('clearFiltersButton').addEventListener('click', (event) => {
-        event.preventDefault();
-        document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
-        updateSelectedFilters();
-    });
+    const clearFiltersButton = document.getElementById('clearFiltersButton');
+    if (clearFiltersButton) {
+        clearFiltersButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+            updateSelectedFilters();
+        });
+    }
 
     // Event listeners for decade buttons
-    document.getElementById('decade-1990').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=1990-01-01,1999-12-31&platforms=18,1,7`;
-        callAPI(1); // Reset to page 1 when changing decades
-    });
+    const decade1990 = document.getElementById('decade-1990');
+    if (decade1990) {
+        decade1990.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=1990-01-01,1999-12-31&platforms=18,1,7`;
+            callAPI(1);
+        });
+    }
 
-    document.getElementById('decade-2000').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
-        callAPI(1); // Reset to page 1 when changing decades
-    });
+    const decade2000 = document.getElementById('decade-2000');
+    if (decade2000) {
+        decade2000.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
+            callAPI(1);
+        });
+    }
 
-    document.getElementById('decade-2010').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
-        callAPI(1); // Reset to page 1 when changing decades
-    });
+    const decade2010 = document.getElementById('decade-2010');
+    if (decade2010) {
+        decade2010.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2010-01-01,2019-12-31&platforms=18,1,7`;
+            callAPI(1);
+        });
+    }
 
-    document.getElementById('decade-2020').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2023-12-31&platforms=18,1,7`;
-        callAPI(1); // Reset to page 1 when changing decades
-    });
+    const decade2020 = document.getElementById('decade-2020');
+    if (decade2020) {
+        decade2020.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2020-01-01,2023-12-31&platforms=18,1,7`;
+            callAPI(1);
+        });
+    }
 
-    document.getElementById('all-decades').addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // All platforms
-        callAPI(1); // Reset to page 1 when selecting all decades
-    });
+    const allDecades = document.getElementById('all-decades');
+    if (allDecades) {
+        allDecades.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`;
+            callAPI(1);
+        });
+    }
 
- // Event listeners for filter buttons (platforms)
-document.getElementById('platform-pc').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4`; // PC platform ID
-    callAPI(1);
-});
+    // Event listeners for filter buttons (platforms)
+    const platformPC = document.getElementById('platform-pc');
+    if (platformPC) {
+        platformPC.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-playstation').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18`; // PlayStation platform ID
-    callAPI(1);
-});
+    const platformPlaystation = document.getElementById('platform-playstation');
+    if (platformPlaystation) {
+        platformPlaystation.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-xbox').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=1`; // Xbox platform ID
-    callAPI(1);
-});
+    const platformXbox = document.getElementById('platform-xbox');
+    if (platformXbox) {
+        platformXbox.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=1`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-nintendo').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=7`; // Nintendo platform ID
-    callAPI(1);
-});
+    const platformNintendo = document.getElementById('platform-nintendo');
+    if (platformNintendo) {
+        platformNintendo.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=7`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-sega').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=8`; // Sega platform ID
-    callAPI(1);
-});
+    const platformSega = document.getElementById('platform-sega');
+    if (platformSega) {
+        platformSega.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=8`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-atari').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=9`; // Atari platform ID
-    callAPI(1);
-});
+    const platformAtari = document.getElementById('platform-atari');
+    if (platformAtari) {
+        platformAtari.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=9`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-commodore').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=10`; // Commodore platform ID
-    callAPI(1);
-});
+    const platformCommodore = document.getElementById('platform-commodore');
+    if (platformCommodore) {
+        platformCommodore.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=10`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('platform-all').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7,8,9,10`; // All platforms
-    callAPI(1);
-});
+    const platformAll = document.getElementById('platform-all');
+    if (platformAll) {
+        platformAll.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7,8,9,10`;
+            callAPI(1);
+        });
+    }
 
-// Event listeners for filter buttons (genres)
-document.getElementById('genre-action').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4`; // Action genre ID
-    callAPI(1);
-});
+    // Event listeners for filter buttons (genres)
+    const genreAction = document.getElementById('genre-action');
+    if (genreAction) {
+        genreAction.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-adventure').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=3`; // Adventure genre ID
-    callAPI(1);
-});
+    const genreAdventure = document.getElementById('genre-adventure');
+    if (genreAdventure) {
+        genreAdventure.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=3`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-rpg').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=5`; // RPG genre ID
-    callAPI(1);
-});
+    const genreRPG = document.getElementById('genre-rpg');
+    if (genreRPG) {
+        genreRPG.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=5`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-strategy').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=10`; // Strategy genre ID
-    callAPI(1);
-});
+    const genreStrategy = document.getElementById('genre-strategy');
+    if (genreStrategy) {
+        genreStrategy.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=10`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-shooter').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=2`; // Shooter genre ID
-    callAPI(1);
-});
+    const genreShooter = document.getElementById('genre-shooter');
+    if (genreShooter) {
+        genreShooter.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=2`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-sports').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=11`; // Sports genre ID
-    callAPI(1);
-});
+    const genreSports = document.getElementById('genre-sports');
+    if (genreSports) {
+        genreSports.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=11`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-puzzle').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=12`; // Puzzle genre ID
-    callAPI(1);
-});
+    const genrePuzzle = document.getElementById('genre-puzzle');
+    if (genrePuzzle) {
+        genrePuzzle.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=12`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-arcade').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=13`; // Arcade genre ID
-    callAPI(1);
-});
+    const genreArcade = document.getElementById('genre-arcade');
+    if (genreArcade) {
+        genreArcade.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=13`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-simulation').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=14`; // Simulation genre ID
-    callAPI(1);
-});
+    const genreSimulation = document.getElementById('genre-simulation');
+    if (genreSimulation) {
+        genreSimulation.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=14`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-racing').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=15`; // Racing genre ID
-    callAPI(1);
-});
+    const genreRacing = document.getElementById('genre-racing');
+    if (genreRacing) {
+        genreRacing.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=15`;
+            callAPI(1);
+        });
+    }
 
-document.getElementById('genre-all').addEventListener('click', (event) => {
-    event.preventDefault();
-    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10,2,11,12,13,14,15`; // All genres
-    callAPI(1);
-});
-
-document.getElementById('completedGames').addEventListener('click', () => {
-    completedCurrentPage = 1; // Reset to first page
-    displayCompletedGames(completedCurrentPage);
-    history.pushState({}, '', '?fromProfile=true&profileSection=completed');
-});
-
-document.getElementById('backloggedGames').addEventListener('click', () => {
-    backloggedCurrentPage = 1; // Reset to first page
-    displayBackloggedGames(backloggedCurrentPage);
-    history.pushState({}, '', '?fromProfile=true&profileSection=backlogged');
-});
-
-
+    const genreAll = document.getElementById('genre-all');
+    if (genreAll) {
+        genreAll.addEventListener('click', (event) => {
+            event.preventDefault();
+            baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10,2,11,12,13,14,15`;
+            callAPI(1);
+        });
+    }
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {

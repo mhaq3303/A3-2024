@@ -208,40 +208,29 @@ select option:checked, .rating-display .rating-star.selected {
 }
 
 .pagination {
+  flex-wrap: nowrap;
   justify-content: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
   display: flex;
 }
 
 .pagination .page-item {
-  margin: 0;
+  margin: 0 5px;
 }
 
 .pagination .page-link {
-  color: #c6c6c6;
-  cursor: pointer;
+  color: #fff;
   background-color: #1d1d1d;
   border: none;
-  border-radius: 5px;
-  margin: 0;
-  padding: 10px 15px;
 }
 
-.pagination .page-link:hover {
-  color: #e5e5e5;
+.pagination .page-link:hover, .pagination .page-item.active .page-link {
+  color: #fff;
   background-color: #5e3787;
 }
 
 .pagination .page-item.disabled .page-link {
   cursor: not-allowed;
   background-color: #d3d3d3;
-}
-
-.pagination .page-item.active .page-link {
-  color: #fff;
-  background-color: #040404;
 }
 
 .dropdown-menu {

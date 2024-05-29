@@ -254,38 +254,32 @@ $custom-text-color: #c6c6c6;
 .pagination {
   display: flex;
   justify-content: center;
-  list-style: none;
-  padding: 0;
-  margin: 0; /* Remove default margin */
+  flex-wrap: nowrap; /* Ensure buttons stay in a row */
 }
 
 .pagination .page-item {
-  margin: 0; /* Remove default margin */
+  margin: 0 5px; /* Add some horizontal spacing between buttons */
 }
 
 .pagination .page-link {
-  background-color: $pagination-bg;
-  color: $custom-text-color;
-  border: none; /* Remove border */
-  margin: 0; /* Remove spacing between buttons */
-  padding: 10px 15px;
-  cursor: pointer; /* Add a pointer cursor for better UX */
-  border-radius: 5px; /* Optional: add some border radius */
+  background-color: #1d1d1d;
+  color: white;
+  border: none;
 }
 
 .pagination .page-link:hover {
-  background-color: $pagination-hover-bg;
-  color: $pagination-hover-text;
+  background-color: #5e3787;
+  color: white;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #5e3787;
+  color: white;
 }
 
 .pagination .page-item.disabled .page-link {
   background-color: #d3d3d3;
   cursor: not-allowed;
-}
-
-.pagination .page-item.active .page-link {
-  background-color: darken($pagination-bg, 10%);
-  color: #fff;
 }
 
 

@@ -15,7 +15,6 @@
       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput">
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-    <div id="selectedFilters" class="text-white me-2">Selected Filters: None</div>
     <button class="btn btn-outline-info ms-2" id="profileButton">Profile</button>
   </nav>
   <div id="game-container" style="position: relative;">
@@ -44,10 +43,10 @@
         <li><a class="dropdown-item" id="platform-playstation" href="#">PlayStation</a></li>
         <li><a class="dropdown-item" id="platform-xbox" href="#">Xbox</a></li>
         <li><a class="dropdown-item" id="platform-nintendo" href="#">Nintendo</a></li>
-        <li><a class="dropdown-item" id="platform-all" href="#">All Platforms</a></li>
+        <li><a class="dropdown-item" id="platform-sega" href="#">Sega</a></li>
         <li><a class="dropdown-item" id="platform-atari" href="#">Atari</a></li>
         <li><a class="dropdown-item" id="platform-commodore" href="#">Commodore</a></li>
-        <li><a class="dropdown-item" id="platform-sega" href="#">Sega</a></li>
+        <li><a class="dropdown-item" id="platform-all" href="#">All Platforms</a></li>
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Select Genre</li>
         <li><a class="dropdown-item" id="genre-action" href="#">Action</a></li>
@@ -58,6 +57,8 @@
         <li><a class="dropdown-item" id="genre-sports" href="#">Sports</a></li>
         <li><a class="dropdown-item" id="genre-puzzle" href="#">Puzzle</a></li>
         <li><a class="dropdown-item" id="genre-arcade" href="#">Arcade</a></li>
+        <li><a class="dropdown-item" id="genre-simulation" href="#">Simulation</a></li>
+        <li><a class="dropdown-item" id="genre-racing" href="#">Racing</a></li>
         <li><a class="dropdown-item" id="genre-all" href="#">All Genres</a></li>
       </ul>
     </div>
@@ -72,9 +73,6 @@
     <div id="game-details" style="display: none;"></div>
     <div id="profile-page" style="display: none;">
       <div id="profile-games"></div>
-      <nav aria-label="Profile Page navigation">
-        <ul class="pagination justify-content-center" id="profile-pagination"></ul>
-    </nav>
     </div>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center" id="pagination">
