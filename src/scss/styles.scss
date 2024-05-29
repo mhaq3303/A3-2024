@@ -5,10 +5,10 @@ $black: #2c2c2c;
 $purple: #800080;
 $pagination-bg: #1d1d1d;
 $pagination-hover-bg: #5e3787;
-$pagination-hover-text: #434143;
+$pagination-hover-text: #e5e5e5;
 $dropdown-bg: #1d1d1d;
 $dropdown-hover-bg: #5e3787;
-$dropdown-hover-text: #434143;
+$dropdown-hover-text: #e5e5e5;
 
 /* Import Raleway font */
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
@@ -16,7 +16,7 @@ $dropdown-hover-text: #434143;
 /* Custom styles for dark black background */
 body {
   font-family: 'Raleway', sans-serif;
-  background-color: #171717;
+  background-color: #111111;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,50 +36,54 @@ body {
   font-size: 30px;
 }
 
-.rating {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
+/* Style for the dropdown menu */
+select {
+  background-color: #111111; /* Black background */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  padding: 10px; /* Add some padding */
+  border-radius: 5px; /* Optional: rounded corners */
+  appearance: none; /* Remove default arrow */
+  -webkit-appearance: none; /* Remove default arrow for Safari */
+  -moz-appearance: none; /* Remove default arrow for Firefox */
+  position: relative; /* Positioning for the custom arrow */
+  font-size: 1em; /* Adjust font size */
 }
 
-.rating span {
-  margin-right: 10px;
+/* Add custom arrow */
+select::after {
+  content: '\25BC'; /* Unicode character for down arrow */
+  position: absolute; 
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Allow clicks to pass through */
+  color: #ffffff; /* White arrow */
 }
 
-.rating input[type="radio"] {
-  display: none;
+/* Style for the options */
+select option {
+  background-color: #111111; /* Black background */
+  color: #ffffff; /* White text */
 }
 
-.rating label.rating-star {
-  font-size: 1.5em;
-  color: #ddd;
-  cursor: pointer;
+/* Optional: style for the focused state */
+select:focus {
+  outline: none; /* Remove outline */
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Add a white shadow */
 }
 
-.rating input[type="radio"]:checked ~ label.rating-star,
-.rating input[type="radio"]:checked ~ label.rating-star ~ label.rating-star {
-  color: #f5b301;
+/* Bold the selected option in the dropdown */
+select option:checked {
+  font-weight: bold;
 }
 
-.rating label.rating-star:hover,
-.rating label.rating-star:hover ~ label.rating-star {
-  color: #f5b301;
+/* Bold the selected rating in the profile page */
+.rating-display .rating-star.selected {
+  font-weight: bold;
 }
 
-.rating-display {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
 
-.rating-display .rating-star {
-  font-size: 1.5em;
-  color: #ddd;
-}
-
-.rating-display .rating-star.rated {
-  color: #f5b301;
-}
 
 
 /* Additional styles for purple accenting */
@@ -131,7 +135,7 @@ $custom-text-color: #c6c6c6;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   width: 80%;
-  max-width: 800px;
+  max-width: 1200px;
   text-align: center; /* Center the content inside the container */
   display: flex;
   flex-direction: column;
@@ -246,6 +250,24 @@ $custom-text-color: #c6c6c6;
 .dropdown-menu {
   background-color: #343a40;
   color: white;
+  padding: 5px 0; /* Adjust padding for the entire dropdown */
+
+  .dropdown-header {
+    padding: 5px 15px; /* Adjust padding for headers */
+    font-size: 0.9em; /* Optionally reduce font size */
+  }
+
+  .dropdown-item {
+    padding: 5px 15px; /* Adjust padding for items */
+    margin: 0; /* Remove margin */
+    font-size: 0.9em; /* Optionally reduce font size */
+    color: white;
+
+    &:hover {
+      background-color: #495057;
+      color: white;
+    }
+  }
 }
 
 .dropdown-item {
@@ -259,6 +281,8 @@ $custom-text-color: #c6c6c6;
 
 /* Dropdown toggle button styles */
 .dropdown-toggle {
+  padding: 5px 15px; /* Adjust padding for the toggle button */
+  font-size: 0.9em;
   background-color: $dropdown-bg;
   color: $custom-text-color;
   border: none;
@@ -277,6 +301,21 @@ $custom-text-color: #c6c6c6;
 .game-details-page h2 {
   font-weight: bold;
 }
+
+/* Add custom styles for the dropdown buttons */
+.dropdown {
+  display: inline-block;
+  margin-right: 30px; /* Increase this value to create more space between dropdowns */
+}
+
+#decadeDropdown {
+  margin-right: 30px; /* Increase this value to create more space */
+}
+
+#filterDropdown {
+  margin-left: 30px; /* Adjust this value to control the spacing if needed */
+}
+
 
 .btn-remove {
   background-color: #f8d7da; /* Pale red background */

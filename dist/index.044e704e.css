@@ -1,6 +1,6 @@
 @import "https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap";
 body {
-  background-color: #171717;
+  background-color: #111;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -20,43 +20,39 @@ body {
   font-weight: 1000;
 }
 
-.rating {
-  align-items: center;
-  margin-top: 10px;
-  display: flex;
+select {
+  color: #fff;
+  appearance: none;
+  background-color: #111;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1em;
+  position: relative;
 }
 
-.rating span {
-  margin-right: 10px;
+select:after {
+  content: "▼";
+  pointer-events: none;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
 }
 
-.rating input[type="radio"] {
-  display: none;
+select option {
+  color: #fff;
+  background-color: #111;
 }
 
-.rating label.rating-star {
-  color: #ddd;
-  cursor: pointer;
-  font-size: 1.5em;
+select:focus {
+  outline: none;
+  box-shadow: 0 0 5px #ffffff80;
 }
 
-.rating input[type="radio"]:checked ~ label.rating-star, .rating input[type="radio"]:checked ~ label.rating-star ~ label.rating-star, .rating label.rating-star:hover, .rating label.rating-star:hover ~ label.rating-star {
-  color: #f5b301;
-}
-
-.rating-display {
-  align-items: center;
-  margin-top: 10px;
-  display: flex;
-}
-
-.rating-display .rating-star {
-  color: #ddd;
-  font-size: 1.5em;
-}
-
-.rating-display .rating-star.rated {
-  color: #f5b301;
+select option:checked, .rating-display .rating-star.selected {
+  font-weight: bold;
 }
 
 .btn-primary, .btn-secondary {
@@ -97,7 +93,7 @@ body {
   flex-direction: column;
   align-items: center;
   width: 80%;
-  max-width: 800px;
+  max-width: 1200px;
   margin-top: 80px;
   padding: 20px;
   display: flex;
@@ -165,7 +161,7 @@ body {
 }
 
 #pagination .page-link:hover {
-  color: #434143;
+  color: #e5e5e5;
   background-color: #5e3787;
 }
 
@@ -206,6 +202,24 @@ body {
 .dropdown-menu {
   color: #fff;
   background-color: #343a40;
+  padding: 5px 0;
+}
+
+.dropdown-menu .dropdown-header {
+  padding: 5px 15px;
+  font-size: .9em;
+}
+
+.dropdown-menu .dropdown-item {
+  color: #fff;
+  margin: 0;
+  padding: 5px 15px;
+  font-size: .9em;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  color: #fff;
+  background-color: #495057;
 }
 
 .dropdown-item {
@@ -221,10 +235,12 @@ body {
   color: #c6c6c6;
   background-color: #1d1d1d;
   border: none;
+  padding: 5px 15px;
+  font-size: .9em;
 }
 
 .dropdown-toggle:hover, .dropdown-toggle:focus {
-  color: #434143;
+  color: #e5e5e5;
   background-color: #5e3787;
 }
 
@@ -234,6 +250,19 @@ body {
 
 .game-details-page h2 {
   font-weight: bold;
+}
+
+.dropdown {
+  margin-right: 30px;
+  display: inline-block;
+}
+
+#decadeDropdown {
+  margin-right: 30px;
+}
+
+#filterDropdown {
+  margin-left: 30px;
 }
 
 .btn-remove {
@@ -263,7 +292,7 @@ body {
 }
 
 .navbar .btn-outline-success:hover, .navbar .btn-outline-success:focus, .navbar .btn-outline-info:hover, .navbar .btn-outline-info:focus {
-  color: #434143;
+  color: #e5e5e5;
   background-color: #5e3787;
   border-color: #5e3787;
 }

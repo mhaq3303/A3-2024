@@ -102,6 +102,7 @@ function updatePaginationButtons() {
 }
 
 // Function to load game details
+// Function to load game details
 async function loadGameDetails(gameId, fromProfile = false, profileSection = '') {
     const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : '';
     history.pushState({}, '', `?game=${gameId}${profileParam}`); // Use history.pushState to update the URL without reloading
@@ -142,10 +143,11 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
             ratingHtml = `
                 <div class="rating">
                     <span>Rate this game: </span>
-                    ${[1, 2, 3, 4, 5].map(rating => `
-                        <input type="radio" id="star${rating}" name="rating" value="${rating}" ${rating == savedRating ? 'checked' : ''} />
-                        <label for="star${rating}" class="rating-star">&#9733;</label>
-                    `).join('')}
+                    <select id="rating-dropdown" name="rating">
+                        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(rating => `
+                            <option value="${rating}" ${rating == savedRating ? 'selected' : ''}>${rating}</option>
+                        `).join('')}
+                    </select>
                 </div>
             `;
         }
@@ -167,12 +169,11 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
         `;
 
         if (isCompleted) {
-            const ratingInputs = document.querySelectorAll('input[name="rating"]');
-            ratingInputs.forEach(input => {
-                input.addEventListener('change', (event) => {
-                    localStorage.setItem(`rating-${game.id}`, event.target.value);
-                    alert(`You rated this game ${event.target.value} star${event.target.value > 1 ? 's' : ''}`);
-                });
+            const ratingDropdown = document.getElementById('rating-dropdown');
+            ratingDropdown.addEventListener('change', (event) => {
+                const newRating = event.target.value;
+                localStorage.setItem(`rating-${game.id}`, newRating);
+                alert(`You rated this game ${newRating} star${newRating > 1 ? 's' : ''}`);
             });
         }
     } catch (error) {
@@ -182,13 +183,31 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
 
 
 
+
 // Function to mark a game as completed
 function markAsCompleted(game) {
     if (!completedGames.some(g => g.id === game.id)) {
-        completedGames.push(game);
-        localStorage.setItem('completedGames', JSON.stringify(completedGames));
+        const rating = promptRating();
+        if (rating !== null) {
+            game.rating = rating; // Add rating to game object
+            completedGames.push(game);
+            localStorage.setItem('completedGames', JSON.stringify(completedGames));
+            localStorage.setItem(`rating-${game.id}`, rating); // Save rating in localStorage
+        }
     } else {
         alert('Game is already marked as completed.');
+    }
+}
+
+// Function to prompt user for rating
+function promptRating() {
+    let rating = prompt("Please rate this game from 1 to 10:");
+    rating = parseInt(rating, 10);
+    if (rating >= 1 && rating <= 10) {
+        return rating;
+    } else {
+        alert('Invalid rating. Please enter a number between 1 and 10.');
+        return null;
     }
 }
 
@@ -288,12 +307,12 @@ function displayCompletedGames() {
 
         // Add rating display
         const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
-        const ratingDisplay = `
-            <div class="rating-display">
-                ${[1, 2, 3, 4, 5].map(rating => `
-                    <span class="rating-star ${rating <= savedRating ? 'rated' : ''}">&#9733;</span>
-                `).join('')}
-            </div>
+        const ratingDisplay = document.createElement('div');
+        ratingDisplay.className = 'rating-display';
+        ratingDisplay.innerHTML = `
+            ${[1, 2, 3, 4, 5].map(rating => `
+                <span class="rating-star ${rating == savedRating ? 'selected' : ''}">${rating}</span>
+            `).join('')}
         `;
 
         gameDetails.appendChild(gameTitle);
@@ -301,12 +320,14 @@ function displayCompletedGames() {
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
         gameDetails.appendChild(removeButton);
-        gameDetails.insertAdjacentHTML('beforeend', ratingDisplay);
+        gameDetails.appendChild(ratingDisplay);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
     });
 }
+
+
 
 // Function to display backlogged games
 function displayBackloggedGames() {
