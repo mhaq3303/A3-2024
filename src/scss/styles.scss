@@ -251,6 +251,42 @@ $custom-text-color: #c6c6c6;
   background-color: darkmagenta;
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0; /* Remove default margin */
+}
+
+.pagination .page-item {
+  margin: 0; /* Remove default margin */
+}
+
+.pagination .page-link {
+  background-color: $pagination-bg;
+  color: $custom-text-color;
+  border: none; /* Remove border */
+  margin: 0; /* Remove spacing between buttons */
+  padding: 10px 15px;
+  cursor: pointer; /* Add a pointer cursor for better UX */
+  border-radius: 5px; /* Optional: add some border radius */
+}
+
+.pagination .page-link:hover {
+  background-color: $pagination-hover-bg;
+  color: $pagination-hover-text;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: darken($pagination-bg, 10%);
+  color: #fff;
+}
 
 
 /* Dropdown menu styles */

@@ -2,6 +2,11 @@ const apiKey = "91574a6ba1164bd5a7cb766c4251213b";
 let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}`;
 let currentPage = 1;
 let totalPages = 1;
+let completedCurrentPage = 1;
+let completedTotalPages = 1;
+let backloggedCurrentPage = 1;
+let backloggedTotalPages = 1;
+const itemsPerPage = 5; // Number of items per page
 let completedGames = JSON.parse(localStorage.getItem("completedGames")) || [];
 let backloggedGames = JSON.parse(localStorage.getItem("backloggedGames")) || [];
 // Function to call the API
@@ -88,6 +93,7 @@ function updatePaginationButtons() {
     }
 }
 // Function to load game details
+// Function to load game details
 async function loadGameDetails(gameId, fromProfile = false, profileSection = "") {
     const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : "";
     history.pushState({}, "", `?game=${gameId}${profileParam}`);
@@ -119,7 +125,12 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = "")
             const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
             ratingHtml = `
                 <div class="rating">
-                    <span>Rating: ${savedRating}/10</span>
+                    <label for="rating-${game.id}">Rating: </label>
+                    <select id="rating-${game.id}">
+                        ${Array.from({
+                length: 10
+            }, (_, i)=>`<option value="${i + 1}" ${savedRating == i + 1 ? "selected" : ""}>${i + 1}</option>`).join("")}
+                    </select>/10
                 </div>
             `;
         }
@@ -188,6 +199,7 @@ function displayProfilePage() {
     const filterDropdown = document.getElementById("filterDropdown");
     const clearFiltersButton = document.getElementById("clearFiltersButton");
     const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
+    const bottomPagination = document.getElementById("pagination"); // Get the bottom pagination element
     gamesContainer.style.display = "none";
     gameDetailsContainer.style.display = "none";
     profilePageContainer.style.display = "block";
@@ -195,6 +207,7 @@ function displayProfilePage() {
     filterDropdown.style.display = "none";
     clearFiltersButton.style.display = "none";
     gameListTitle.style.display = "none"; // Hide the game list title
+    bottomPagination.style.display = "none"; // Hide the bottom pagination
     profileGamesContainer.innerHTML = `
         <div class="dropdown" id="profileDropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="profileMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -206,6 +219,9 @@ function displayProfilePage() {
             </ul>
         </div>
         <div id="profile-games-list"></div>
+        <nav aria-label="Profile Page navigation">
+            <ul class="pagination justify-content-center" id="profile-pagination"></ul>
+        </nav>
     `;
     document.getElementById("completedGames").addEventListener("click", ()=>{
         displayCompletedGames();
@@ -217,10 +233,13 @@ function displayProfilePage() {
     });
 }
 // Function to display completed games
-function displayCompletedGames() {
+function displayCompletedGames(page = 1) {
     const profileGamesContainer = document.getElementById("profile-games-list");
     profileGamesContainer.innerHTML = ""; // Clear previous results
-    completedGames.forEach((game)=>{
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const gamesToDisplay = completedGames.slice(startIndex, endIndex);
+    gamesToDisplay.forEach((game)=>{
         const gameElement = document.createElement("div");
         gameElement.className = "game";
         const gameImage = document.createElement("img");
@@ -266,12 +285,16 @@ function displayCompletedGames() {
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
     });
+    completedTotalPages = Math.ceil(completedGames.length / itemsPerPage);
+    updateProfilePaginationButtons("completed", page, completedTotalPages);
 }
-// Function to display backlogged games
-function displayBackloggedGames() {
+function displayBackloggedGames(page = 1) {
     const profileGamesContainer = document.getElementById("profile-games-list");
     profileGamesContainer.innerHTML = ""; // Clear previous results
-    backloggedGames.forEach((game)=>{
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const gamesToDisplay = backloggedGames.slice(startIndex, endIndex);
+    gamesToDisplay.forEach((game)=>{
         const gameElement = document.createElement("div");
         gameElement.className = "game";
         const gameImage = document.createElement("img");
@@ -309,6 +332,8 @@ function displayBackloggedGames() {
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
     });
+    backloggedTotalPages = Math.ceil(backloggedGames.length / itemsPerPage);
+    updateProfilePaginationButtons("backlogged", page, backloggedTotalPages);
 }
 // Function to go back to the main page
 function goBack() {
@@ -366,6 +391,30 @@ function removeGameFromBacklogged(gameId) {
     backloggedGames = backloggedGames.filter((game)=>game.id !== gameId);
     localStorage.setItem("backloggedGames", JSON.stringify(backloggedGames));
     displayBackloggedGames(); // Refresh the list
+}
+function updateProfilePaginationButtons(type, currentPage, totalPages) {
+    const paginationContainer = document.getElementById("profile-pagination");
+    paginationContainer.innerHTML = ""; // Clear previous buttons
+    for(let i = 1; i <= totalPages; i++){
+        const button = document.createElement("button");
+        button.className = "page-link";
+        button.textContent = i;
+        button.disabled = i === currentPage;
+        button.addEventListener("click", (event)=>{
+            event.preventDefault();
+            if (type === "completed") {
+                completedCurrentPage = i;
+                displayCompletedGames(completedCurrentPage);
+            } else if (type === "backlogged") {
+                backloggedCurrentPage = i;
+                displayBackloggedGames(backloggedCurrentPage);
+            }
+        });
+        const listItem = document.createElement("li");
+        listItem.className = "page-item";
+        listItem.appendChild(button);
+        paginationContainer.appendChild(listItem);
+    }
 }
 // Event listener for the search form
 document.getElementById("searchForm").addEventListener("submit", (event)=>{
@@ -579,6 +628,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
         event.preventDefault();
         baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10,2,11,12,13,14,15`; // All genres
         callAPI(1);
+    });
+    document.getElementById("completedGames").addEventListener("click", ()=>{
+        completedCurrentPage = 1; // Reset to first page
+        displayCompletedGames(completedCurrentPage);
+        history.pushState({}, "", "?fromProfile=true&profileSection=completed");
+    });
+    document.getElementById("backloggedGames").addEventListener("click", ()=>{
+        backloggedCurrentPage = 1; // Reset to first page
+        displayBackloggedGames(backloggedCurrentPage);
+        history.pushState({}, "", "?fromProfile=true&profileSection=backlogged");
     });
     // Handle browser back/forward buttons
     window.addEventListener("popstate", (event)=>{
