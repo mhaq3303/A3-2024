@@ -29,6 +29,7 @@ async function callAPI(page, query = '') {
 }
 
 // Function to display games
+// Function to display games
 function displayGames(games) {
     const gamesContainer = document.getElementById('games');
     gamesContainer.innerHTML = ''; // Clear previous results
@@ -60,6 +61,9 @@ function displayGames(games) {
         gameGenres.className = 'game-genres';
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'button-container'; // Add this line
+
         const markAsCompletedButton = document.createElement('button');
         markAsCompletedButton.className = 'btn-completed';
         markAsCompletedButton.textContent = 'Mark as Completed';
@@ -78,17 +82,20 @@ function displayGames(games) {
             alert('Game marked as backlogged.');
         });
 
+        buttonContainer.appendChild(markAsCompletedButton); // Add this line
+        buttonContainer.appendChild(markAsBackloggedButton); // Add this line
+
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
-        gameDetails.appendChild(markAsCompletedButton);
-        gameDetails.appendChild(markAsBackloggedButton);
+        gameDetails.appendChild(buttonContainer); // Add this line
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
     });
 }
+
 
 // Function to update pagination buttons
 function updatePaginationButtons() {
@@ -102,10 +109,9 @@ function updatePaginationButtons() {
 }
 
 // Function to load game details
-// Function to load game details
 async function loadGameDetails(gameId, fromProfile = false, profileSection = '') {
     const profileParam = fromProfile ? `&fromProfile=true&profileSection=${profileSection}` : '';
-    history.pushState({}, '', `?game=${gameId}${profileParam}`); // Use history.pushState to update the URL without reloading
+    history.pushState({}, '', `?game=${gameId}${profileParam}`);
 
     const gamesContainer = document.getElementById('games');
     const gameDetailsContainer = document.getElementById('game-details');
@@ -113,7 +119,7 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
     const decadeDropdown = document.getElementById('decadeDropdown');
     const filterDropdown = document.getElementById('filterDropdown');
     const clearFiltersButton = document.getElementById('clearFiltersButton');
-    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
+    const gameListTitle = document.getElementById('gameListTitle');
 
     gamesContainer.style.display = 'none';
     gameDetailsContainer.style.display = 'block';
@@ -121,7 +127,7 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
     decadeDropdown.style.display = 'none';
     filterDropdown.style.display = 'none';
     clearFiltersButton.style.display = 'none';
-    gameListTitle.style.display = 'none'; // Hide the game list title
+    gameListTitle.style.display = 'none';
 
     try {
         const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
@@ -142,12 +148,7 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
             const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
             ratingHtml = `
                 <div class="rating">
-                    <span>Rate this game: </span>
-                    <select id="rating-dropdown" name="rating">
-                        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(rating => `
-                            <option value="${rating}" ${rating == savedRating ? 'selected' : ''}>${rating}</option>
-                        `).join('')}
-                    </select>
+                    <span>Rating: ${savedRating}/10</span>
                 </div>
             `;
         }
@@ -169,11 +170,10 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
         `;
 
         if (isCompleted) {
-            const ratingDropdown = document.getElementById('rating-dropdown');
-            ratingDropdown.addEventListener('change', (event) => {
-                const newRating = event.target.value;
-                localStorage.setItem(`rating-${game.id}`, newRating);
-                alert(`You rated this game ${newRating} star${newRating > 1 ? 's' : ''}`);
+            const ratingSelect = document.getElementById(`rating-${game.id}`);
+            ratingSelect.addEventListener('change', (event) => {
+                localStorage.setItem(`rating-${game.id}`, event.target.value);
+                alert(`You rated this game ${event.target.value}`);
             });
         }
     } catch (error) {
@@ -307,12 +307,10 @@ function displayCompletedGames() {
 
         // Add rating display
         const savedRating = localStorage.getItem(`rating-${game.id}`) || 0;
-        const ratingDisplay = document.createElement('div');
-        ratingDisplay.className = 'rating-display';
-        ratingDisplay.innerHTML = `
-            ${[1, 2, 3, 4, 5].map(rating => `
-                <span class="rating-star ${rating == savedRating ? 'selected' : ''}">${rating}</span>
-            `).join('')}
+        const ratingDisplay = `
+            <div class="rating-display">
+                <span><strong>Rating: ${savedRating}/10</strong></span>
+            </div>
         `;
 
         gameDetails.appendChild(gameTitle);
@@ -320,12 +318,13 @@ function displayCompletedGames() {
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
         gameDetails.appendChild(removeButton);
-        gameDetails.appendChild(ratingDisplay);
+        gameDetails.insertAdjacentHTML('beforeend', ratingDisplay);
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         profileGamesContainer.appendChild(gameElement);
     });
 }
+
 
 
 
@@ -491,20 +490,83 @@ document.getElementById('homeLink').addEventListener('click', (event) => {
     callAPI(1); // Load games with default filters
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
     // Event listeners for pagination buttons
-    for (let i = 1; i <= 8; i++) { // Assuming you have 8 buttons
+    for (let i = 1; i <= 8; i++) {
         const button = document.getElementById(`page-${i}`);
         if (button) {
             button.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default behavior
+                event.preventDefault();
                 callAPI(i);
             });
         }
     }
 
+    // Function to update selected filters text
+    function updateSelectedFilters() {
+        const selectedDecade = document.querySelector('#decadeDropdown .dropdown-item.active');
+        const selectedPlatform = document.querySelector('#filterDropdown .dropdown-item.active[data-type="platform"]');
+        const selectedGenre = document.querySelector('#filterDropdown .dropdown-item.active[data-type="genre"]');
+
+        let selectedFiltersText = 'Selected Filters: ';
+
+        if (selectedDecade) {
+            selectedFiltersText += `Decade - ${selectedDecade.textContent}`;
+        }
+
+        if (selectedPlatform) {
+            if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
+            selectedFiltersText += `Platform - ${selectedPlatform.textContent}`;
+        }
+
+        if (selectedGenre) {
+            if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
+            selectedFiltersText += `Genre - ${selectedGenre.textContent}`;
+        }
+
+        if (!selectedDecade && !selectedPlatform && !selectedGenre) {
+            selectedFiltersText += 'None';
+        }
+
+        document.getElementById('selectedFilters').textContent = selectedFiltersText;
+    }
+
+    // Add 'data-type' attributes to filter items and add 'active' class on click
+    document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(item => {
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
+            document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            updateSelectedFilters();
+        });
+    });
+
+    // Event listeners for platform and genre filter buttons
+    document.querySelectorAll('#filterDropdown .dropdown-item').forEach(item => {
+        item.dataset.type = item.textContent.includes('Platform') ? 'platform' : 'genre';
+        item.addEventListener('click', (event) => {
+            event.preventDefault();
+            const type = item.dataset.type;
+            document.querySelectorAll(`#filterDropdown .dropdown-item[data-type="${type}"]`).forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            updateSelectedFilters();
+        });
+    });
+
+    // Event listener for Clear Filters button
+    document.getElementById('clearFiltersButton').addEventListener('click', (event) => {
+        event.preventDefault();
+        document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+        updateSelectedFilters();
+    });
+
     // Event listeners for decade buttons
+    document.getElementById('decade-1990').addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent default behavior
+        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=1990-01-01,1999-12-31&platforms=18,1,7`;
+        callAPI(1); // Reset to page 1 when changing decades
+    });
+
     document.getElementById('decade-2000').addEventListener('click', (event) => {
         event.preventDefault(); // Prevent default behavior
         baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2000-01-01,2009-12-31&platforms=18,1,7`;
@@ -529,67 +591,122 @@ document.addEventListener('DOMContentLoaded', () => {
         callAPI(1); // Reset to page 1 when selecting all decades
     });
 
-    // Event listeners for filter buttons (platforms)
-    document.getElementById('platform-pc').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4`; // PC platform ID
-        callAPI(1);
-    });
+ // Event listeners for filter buttons (platforms)
+document.getElementById('platform-pc').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4`; // PC platform ID
+    callAPI(1);
+});
 
-    document.getElementById('platform-playstation').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18`; // PlayStation platform ID
-        callAPI(1);
-    });
+document.getElementById('platform-playstation').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=18`; // PlayStation platform ID
+    callAPI(1);
+});
 
-    document.getElementById('platform-xbox').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=1`; // Xbox platform ID
-        callAPI(1);
-    });
+document.getElementById('platform-xbox').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=1`; // Xbox platform ID
+    callAPI(1);
+});
 
-    document.getElementById('platform-nintendo').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=7`; // Nintendo platform ID
-        callAPI(1);
-    });
+document.getElementById('platform-nintendo').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=7`; // Nintendo platform ID
+    callAPI(1);
+});
 
-    document.getElementById('platform-all').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // All platforms
-        callAPI(1);
-    });
+document.getElementById('platform-sega').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=8`; // Sega platform ID
+    callAPI(1);
+});
 
-    // Event listeners for filter buttons (genres)
-    document.getElementById('genre-action').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4`; // Action genre ID
-        callAPI(1);
-    });
+document.getElementById('platform-atari').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=9`; // Atari platform ID
+    callAPI(1);
+});
 
-    document.getElementById('genre-adventure').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=3`; // Adventure genre ID
-        callAPI(1);
-    });
+document.getElementById('platform-commodore').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=10`; // Commodore platform ID
+    callAPI(1);
+});
 
-    document.getElementById('genre-rpg').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=5`; // RPG genre ID
-        callAPI(1);
-    });
+document.getElementById('platform-all').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7,8,9,10`; // All platforms
+    callAPI(1);
+});
 
-    document.getElementById('genre-strategy').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=10`; // Strategy genre ID
-        callAPI(1);
-    });
+// Event listeners for filter buttons (genres)
+document.getElementById('genre-action').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4`; // Action genre ID
+    callAPI(1);
+});
 
-    document.getElementById('genre-all').addEventListener('click', (event) => {
-        event.preventDefault();
-        baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10`; // All genres
-        callAPI(1);
-    });
+document.getElementById('genre-adventure').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=3`; // Adventure genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-rpg').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=5`; // RPG genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-strategy').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=10`; // Strategy genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-shooter').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=2`; // Shooter genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-sports').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=11`; // Sports genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-puzzle').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=12`; // Puzzle genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-arcade').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=13`; // Arcade genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-simulation').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=14`; // Simulation genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-racing').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=15`; // Racing genre ID
+    callAPI(1);
+});
+
+document.getElementById('genre-all').addEventListener('click', (event) => {
+    event.preventDefault();
+    baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&genres=4,3,5,10,2,11,12,13,14,15`; // All genres
+    callAPI(1);
+});
+
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {

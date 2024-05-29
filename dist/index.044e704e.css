@@ -170,13 +170,19 @@ select option:checked, .rating-display .rating-star.selected {
   background-color: #d3d3d3;
 }
 
+.button-container {
+  gap: 10px;
+  display: flex;
+}
+
 .btn-completed {
   color: #fff;
   cursor: pointer;
+  text-align: center;
   background-color: green;
   border: none;
   border-radius: 5px;
-  margin-right: 10px;
+  flex: 1;
   padding: 10px 20px;
   font-weight: bold;
 }
@@ -184,9 +190,11 @@ select option:checked, .rating-display .rating-star.selected {
 .btn-backlogged {
   color: #fff;
   cursor: pointer;
+  text-align: center;
   background-color: purple;
   border: none;
   border-radius: 5px;
+  flex: 1;
   padding: 10px 20px;
   font-weight: bold;
 }

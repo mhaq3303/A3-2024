@@ -15,6 +15,7 @@
       <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchInput">
       <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
+    <div id="selectedFilters" class="text-white me-2">Selected Filters: None</div>
     <button class="btn btn-outline-info ms-2" id="profileButton">Profile</button>
   </nav>
   <div id="game-container" style="position: relative;">
@@ -24,6 +25,7 @@
         Select Decade
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <li><a class="dropdown-item" id="decade-1990" href="#">1990-1999</a></li>
         <li><a class="dropdown-item" id="decade-2000" href="#">2000-2009</a></li>
         <li><a class="dropdown-item" id="decade-2010" href="#">2010-2019</a></li>
         <li><a class="dropdown-item" id="decade-2020" href="#">2020-2023</a></li>
@@ -43,12 +45,19 @@
         <li><a class="dropdown-item" id="platform-xbox" href="#">Xbox</a></li>
         <li><a class="dropdown-item" id="platform-nintendo" href="#">Nintendo</a></li>
         <li><a class="dropdown-item" id="platform-all" href="#">All Platforms</a></li>
+        <li><a class="dropdown-item" id="platform-atari" href="#">Atari</a></li>
+        <li><a class="dropdown-item" id="platform-commodore" href="#">Commodore</a></li>
+        <li><a class="dropdown-item" id="platform-sega" href="#">Sega</a></li>
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Select Genre</li>
         <li><a class="dropdown-item" id="genre-action" href="#">Action</a></li>
         <li><a class="dropdown-item" id="genre-adventure" href="#">Adventure</a></li>
         <li><a class="dropdown-item" id="genre-rpg" href="#">RPG</a></li>
         <li><a class="dropdown-item" id="genre-strategy" href="#">Strategy</a></li>
+        <li><a class="dropdown-item" id="genre-shooter" href="#">Shooter</a></li>
+        <li><a class="dropdown-item" id="genre-sports" href="#">Sports</a></li>
+        <li><a class="dropdown-item" id="genre-puzzle" href="#">Puzzle</a></li>
+        <li><a class="dropdown-item" id="genre-arcade" href="#">Arcade</a></li>
         <li><a class="dropdown-item" id="genre-all" href="#">All Genres</a></li>
       </ul>
     </div>

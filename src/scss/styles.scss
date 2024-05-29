@@ -111,8 +111,6 @@ select option:checked {
 }
 
 
-
-
 /* Define your custom margin value */
 $custom-margin: 20px;
 
@@ -213,19 +211,25 @@ $custom-text-color: #c6c6c6;
   cursor: not-allowed;
 }
 
-/* Define styles for the completed button */
+/* Flex container for the buttons */
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust the gap between the buttons as needed */
+}
+
+/* Styling for the buttons */
 .btn-completed {
   background-color: green;
   color: white;
   border: none;
   font-weight: bold;
   padding: 10px 20px;
-  margin-right: 10px;
   cursor: pointer;
   border-radius: 5px;
+  flex: 1; /* Optional: Makes the button take up equal space */
+  text-align: center; /* Center the text */
 }
 
-/* Define styles for the backlogged button */
 .btn-backlogged {
   background-color: purple;
   color: white;
@@ -234,6 +238,8 @@ $custom-text-color: #c6c6c6;
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
+  flex: 1; /* Optional: Makes the button take up equal space */
+  text-align: center; /* Center the text */
 }
 
 /* Add hover effects for better user experience */
@@ -244,6 +250,7 @@ $custom-text-color: #c6c6c6;
 .btn-backlogged:hover {
   background-color: darkmagenta;
 }
+
 
 
 /* Dropdown menu styles */
