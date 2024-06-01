@@ -83,9 +83,6 @@ select option:checked {
   font-weight: bold;
 }
 
-
-
-
 /* Additional styles for purple accenting */
 .btn-primary, .btn-secondary {
   background-color: $purple;
@@ -183,33 +180,37 @@ $custom-text-color: #c6c6c6;
   width: 100%;
 }
 
-#pagination {
-  margin-top: 20px;
+.pagination {
   display: flex;
   justify-content: center;
+  flex-wrap: nowrap; /* Ensure the pagination buttons do not wrap */
+  gap: 0; /* Remove any gap between buttons */
 }
 
-#pagination .page-item {
-  margin: 0; /* Remove default margin */
+.page-item {
+  margin: 0; /* Remove any margin around the pagination items */
 }
 
-#pagination .page-link {
-  background-color: $pagination-bg;
-  color: $custom-text-color;
-  border: none; /* Remove border */
-  margin: 0 2px; /* Add a small margin between buttons */
-  padding: 10px 15px;
+.page-link {
+  color: #fff; /* White text */
+  background-color: #343a40; /* Dark background */
+  border: 1px solid #343a40; /* Dark border */
+  margin: 0; /* Remove any margin around the pagination links */
+  padding: 0.5rem 0.75rem; /* Adjust padding as needed */
 }
 
-#pagination .page-link:hover {
-  background-color: $pagination-hover-bg;
-  color: $pagination-hover-text;
+.page-link:hover {
+  color: #fff;
+  background-color: #495057; /* Slightly lighter background on hover */
+  border-color: #495057; /* Slightly lighter border on hover */
 }
 
-#pagination .page-item.disabled .page-link {
-  background-color: #d3d3d3;
-  cursor: not-allowed;
+.page-item.active .page-link {
+  color: #fff;
+  background-color: #495057; /* Active background color */
+  border-color: #495057; /* Active border color */
 }
+
 
 /* Flex container for the buttons */
 .button-container {
@@ -285,7 +286,7 @@ $custom-text-color: #c6c6c6;
 
 /* Dropdown menu styles */
 .dropdown-menu {
-  background-color: #343a40;
+  background-color: #111111;
   color: white;
   padding: 5px 0; /* Adjust padding for the entire dropdown */
 
@@ -301,7 +302,7 @@ $custom-text-color: #c6c6c6;
     color: white;
 
     &:hover {
-      background-color: #495057;
+      background-color: #5e3787;
       color: white;
     }
   }
@@ -312,7 +313,7 @@ $custom-text-color: #c6c6c6;
 }
 
 .dropdown-item:hover {
-  background-color: #495057;
+  background-color: #5e3787;
   color: white;
 }
 
@@ -320,15 +321,16 @@ $custom-text-color: #c6c6c6;
 .dropdown-toggle {
   padding: 5px 15px; /* Adjust padding for the toggle button */
   font-size: 0.9em;
-  background-color: $dropdown-bg;
-  color: $custom-text-color;
+  background-color: #111111;
+  color: white;
   border: none;
 }
 
 .dropdown-toggle:hover, .dropdown-toggle:focus {
-  background-color: $dropdown-hover-bg;
-  color: $dropdown-hover-text;
+  background-color: #5e3787;
+  color: white;
 }
+
 
 /* Styles for game-details-page */
 .game-details-page {

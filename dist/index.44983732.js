@@ -22,6 +22,10 @@ async function callAPI(page, query = "") {
         displayGames(data.results);
         currentPage = page; // Update currentPage after successful fetch
         updatePaginationButtons();
+        const paginationContainer = document.getElementById("pagination");
+        paginationContainer.style.display = "flex"; // Ensure pagination is displayed
+        paginationContainer.style.justifyContent = "center"; // Center the pagination buttons
+        paginationContainer.style.flexDirection = "row"; // Ensure buttons are horizontal
     } catch (error) {
         console.error("There has been a problem with your fetch operation:", error);
     }
@@ -384,7 +388,8 @@ function goBack() {
     const decadeDropdown = document.getElementById("decadeDropdown");
     const filterDropdown = document.getElementById("filterDropdown");
     const clearFiltersButton = document.getElementById("clearFiltersButton");
-    const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
+    const gameListTitle = document.getElementById("gameListTitle");
+    const paginationContainer = document.getElementById("pagination");
     // Check if the user was on the profile page
     const urlParams = new URLSearchParams(window.location.search);
     const fromProfile = urlParams.get("fromProfile");
@@ -398,7 +403,8 @@ function goBack() {
         filterDropdown.style.display = "none";
         clearFiltersButton.style.display = "none";
         gameDetailsContainer.style.display = "none";
-        gameListTitle.style.display = "none"; // Hide the game list title
+        gameListTitle.style.display = "none";
+        paginationContainer.style.display = "none";
         if (profileSection === "completed") {
             displayCompletedGames();
             history.pushState({}, "", "?fromProfile=true&profileSection=completed");
@@ -416,7 +422,10 @@ function goBack() {
         decadeDropdown.style.display = "block";
         filterDropdown.style.display = "block";
         clearFiltersButton.style.display = "block";
-        gameListTitle.style.display = "block"; // Show the game list title
+        gameListTitle.style.display = "block";
+        paginationContainer.style.display = "flex"; // Ensure pagination is displayed correctly
+        paginationContainer.style.justifyContent = "center"; // Center the pagination buttons
+        paginationContainer.style.flexDirection = "row"; // Ensure buttons are horizontal
         history.pushState({}, "", "./");
     }
 }
@@ -481,6 +490,7 @@ document.getElementById("homeLink").addEventListener("click", (event)=>{
     const filterDropdown = document.getElementById("filterDropdown");
     const clearFiltersButton = document.getElementById("clearFiltersButton");
     const gameListTitle = document.getElementById("gameListTitle"); // Get the game list title element
+    const paginationContainer = document.getElementById("pagination");
     gamesContainer.style.display = "block";
     gameDetailsContainer.style.display = "none";
     profilePageContainer.style.display = "none";
@@ -488,17 +498,17 @@ document.getElementById("homeLink").addEventListener("click", (event)=>{
     filterDropdown.style.display = "block";
     clearFiltersButton.style.display = "block";
     gameListTitle.style.display = "block"; // Show the game list title
+    paginationContainer.style.display = "block"; // Ensure pagination is displayed
     // Update URL and call API to load all games
     history.pushState({}, "", "./");
     baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // Reset baseUrl to default
     callAPI(1); // Load games with default filters
 });
 document.addEventListener("DOMContentLoaded", ()=>{
-    // Event listeners for pagination buttons
     for(let i = 1; i <= 8; i++){
         const button = document.getElementById(`page-${i}`);
         if (button) button.addEventListener("click", (event)=>{
-            event.preventDefault();
+            event.preventDefault(); // Prevent default behavior
             callAPI(i);
         });
     }

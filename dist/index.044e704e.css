@@ -142,32 +142,29 @@ select option:checked, .rating-display .rating-star.selected {
   font-size: 14px;
 }
 
-#pagination {
+.pagination {
+  flex-wrap: nowrap;
   justify-content: center;
-  margin-top: 20px;
+  gap: 0;
   display: flex;
 }
 
-#pagination .page-item {
+.page-item {
   margin: 0;
 }
 
-#pagination .page-link {
-  color: #c6c6c6;
-  background-color: #1d1d1d;
-  border: none;
-  margin: 0 2px;
-  padding: 10px 15px;
+.page-link {
+  color: #fff;
+  background-color: #343a40;
+  border: 1px solid #343a40;
+  margin: 0;
+  padding: .5rem .75rem;
 }
 
-#pagination .page-link:hover {
-  color: #e5e5e5;
-  background-color: #5e3787;
-}
-
-#pagination .page-item.disabled .page-link {
-  cursor: not-allowed;
-  background-color: #d3d3d3;
+.page-link:hover, .page-item.active .page-link {
+  color: #fff;
+  background-color: #495057;
+  border-color: #495057;
 }
 
 .button-container {
@@ -235,7 +232,7 @@ select option:checked, .rating-display .rating-star.selected {
 
 .dropdown-menu {
   color: #fff;
-  background-color: #343a40;
+  background-color: #111;
   padding: 5px 0;
 }
 
@@ -253,7 +250,7 @@ select option:checked, .rating-display .rating-star.selected {
 
 .dropdown-menu .dropdown-item:hover {
   color: #fff;
-  background-color: #495057;
+  background-color: #5e3787;
 }
 
 .dropdown-item {
@@ -262,19 +259,19 @@ select option:checked, .rating-display .rating-star.selected {
 
 .dropdown-item:hover {
   color: #fff;
-  background-color: #495057;
+  background-color: #5e3787;
 }
 
 .dropdown-toggle {
-  color: #c6c6c6;
-  background-color: #1d1d1d;
+  color: #fff;
+  background-color: #111;
   border: none;
   padding: 5px 15px;
   font-size: .9em;
 }
 
 .dropdown-toggle:hover, .dropdown-toggle:focus {
-  color: #e5e5e5;
+  color: #fff;
   background-color: #5e3787;
 }
 
