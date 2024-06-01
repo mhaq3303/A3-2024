@@ -618,66 +618,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to update selected filters text
-    function updateSelectedFilters() {
-        const selectedDecade = document.querySelector('#decadeDropdown .dropdown-item.active');
-        const selectedPlatform = document.querySelector('#filterDropdown .dropdown-item.active[data-type="platform"]');
-        const selectedGenre = document.querySelector('#filterDropdown .dropdown-item.active[data-type="genre"]');
+// Function to update selected filters text
+function updateSelectedFilters() {
+    const selectedDecade = document.querySelector('#decadeDropdown .dropdown-item.active');
+    const selectedPlatform = document.querySelector('#filterDropdown .dropdown-item.active[data-type="platform"]');
+    const selectedGenre = document.querySelector('#filterDropdown .dropdown-item.active[data-type="genre"]');
 
-        let selectedFiltersText = 'Selected Filters: ';
+    let selectedFiltersText = 'Selected Filters: ';
 
-        if (selectedDecade) {
-            selectedFiltersText += `Decade - ${selectedDecade.textContent}`;
-        }
-
-        if (selectedPlatform) {
-            if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
-            selectedFiltersText += `Platform - ${selectedPlatform.textContent}`;
-        }
-
-        if (selectedGenre) {
-            if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
-            selectedFiltersText += `Genre - ${selectedGenre.textContent}`;
-        }
-
-        if (!selectedDecade && !selectedPlatform && !selectedGenre) {
-            selectedFiltersText += 'None';
-        }
-
-        document.getElementById('selectedFilters').textContent = selectedFiltersText;
+    if (selectedDecade) {
+        selectedFiltersText += `Decade - ${selectedDecade.textContent}`;
     }
 
-    // Add 'data-type' attributes to filter items and add 'active' class on click
-    document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(item => {
-        item.addEventListener('click', (event) => {
-            event.preventDefault();
-            document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            updateSelectedFilters();
-        });
-    });
-
-    // Event listeners for platform and genre filter buttons
-    document.querySelectorAll('#filterDropdown .dropdown-item').forEach(item => {
-        item.dataset.type = item.textContent.includes('Platform') ? 'platform' : 'genre';
-        item.addEventListener('click', (event) => {
-            event.preventDefault();
-            const type = item.dataset.type;
-            document.querySelectorAll(`#filterDropdown .dropdown-item[data-type="${type}"]`).forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            updateSelectedFilters();
-        });
-    });
-
-    // Event listener for Clear Filters button
-    const clearFiltersButton = document.getElementById('clearFiltersButton');
-    if (clearFiltersButton) {
-        clearFiltersButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
-            updateSelectedFilters();
-        });
+    if (selectedPlatform) {
+        if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
+        selectedFiltersText += `Platform - ${selectedPlatform.textContent}`;
     }
+
+    if (selectedGenre) {
+        if (selectedFiltersText !== 'Selected Filters: ') selectedFiltersText += ', ';
+        selectedFiltersText += `Genre - ${selectedGenre.textContent}`;
+    }
+
+    if (!selectedDecade && !selectedPlatform && !selectedGenre) {  
+        selectedFiltersText += 'None';
+    }
+
+    document.getElementById('selectedFiltersText').textContent = selectedFiltersText;
+}
+
+// Add 'data-type' attributes to filter items and add 'active' class on click
+document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(item => {
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+        document.querySelectorAll('#decadeDropdown .dropdown-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        updateSelectedFilters();
+    });
+});
+
+// Event listeners for platform and genre filter buttons
+document.querySelectorAll('#filterDropdown .dropdown-item').forEach(item => {
+    item.dataset.type = item.textContent.includes('Platform') ? 'platform' : 'genre';
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+        const type = item.dataset.type;
+        document.querySelectorAll(`#filterDropdown .dropdown-item[data-type="${type}"]`).forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        updateSelectedFilters();
+    });
+});
+
+// Event listener for Clear Filters button
+document.getElementById('clearFiltersButton').addEventListener('click', (event) => {
+    event.preventDefault();
+    document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+    updateSelectedFilters();
+});
+
 
     // Event listeners for decade buttons
     const decade1990 = document.getElementById('decade-1990');

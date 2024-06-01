@@ -529,7 +529,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             selectedFiltersText += `Genre - ${selectedGenre.textContent}`;
         }
         if (!selectedDecade && !selectedPlatform && !selectedGenre) selectedFiltersText += "None";
-        document.getElementById("selectedFilters").textContent = selectedFiltersText;
+        document.getElementById("selectedFiltersText").textContent = selectedFiltersText;
     }
     // Add 'data-type' attributes to filter items and add 'active' class on click
     document.querySelectorAll("#decadeDropdown .dropdown-item").forEach((item)=>{
@@ -552,8 +552,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
         });
     });
     // Event listener for Clear Filters button
-    const clearFiltersButton = document.getElementById("clearFiltersButton");
-    if (clearFiltersButton) clearFiltersButton.addEventListener("click", (event)=>{
+    document.getElementById("clearFiltersButton").addEventListener("click", (event)=>{
         event.preventDefault();
         document.querySelectorAll(".dropdown-item").forEach((item)=>item.classList.remove("active"));
         updateSelectedFilters();
