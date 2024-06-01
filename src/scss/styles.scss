@@ -129,12 +129,12 @@ $custom-text-color: #c6c6c6;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  width: 80%;
-  max-width: 1200px;
+  max-width: 100%;
   text-align: center; /* Center the content inside the container */
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
   position: relative; /* For absolute positioning of the dropdown */
   margin-top: 80px; /* Add space below the navbar */
 }
@@ -183,34 +183,38 @@ $custom-text-color: #c6c6c6;
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: nowrap; /* Ensure the pagination buttons do not wrap */
-  gap: 0; /* Remove any gap between buttons */
+  flex-wrap: nowrap; // Ensure the pagination buttons do not wrap
+  gap: 0; // Remove any gap between buttons
+  margin-top: 20px; // Adjust the margin as needed for spacing
+  white-space: nowrap; // Prevent buttons from wrapping to the next line
+  overflow-x: auto; // Enable horizontal scrolling if needed
 }
 
 .page-item {
-  margin: 0; /* Remove any margin around the pagination items */
+  margin: 0; // Remove any margin around the pagination items
 }
 
 .page-link {
-  color: #fff; /* White text */
-  background-color: #343a40; /* Dark background */
-  border: 1px solid #343a40; /* Dark border */
-  margin: 0; /* Remove any margin around the pagination links */
-  padding: 0.5rem 0.75rem; /* Adjust padding as needed */
+  color: #fff; // White text
+  background-color: #343a40; // Dark background
+  border: 1px solid #343a40; // Dark border
+  margin: 0; // Remove any margin around the pagination links
+  padding: 0.5rem 0.75rem; // Adjust padding as needed
+  display: inline-block; // Ensure buttons are inline
+  text-align: center; // Center text
 }
 
 .page-link:hover {
   color: #fff;
-  background-color: #495057; /* Slightly lighter background on hover */
-  border-color: #495057; /* Slightly lighter border on hover */
+  background-color: #495057; // Slightly lighter background on hover
+  border-color: #495057; // Slightly lighter border on hover
 }
 
 .page-item.active .page-link {
   color: #fff;
-  background-color: #495057; /* Active background color */
-  border-color: #495057; /* Active border color */
+  background-color: #495057; // Active background color
+  border-color: #495057; // Active border color
 }
-
 
 /* Flex container for the buttons */
 .button-container {

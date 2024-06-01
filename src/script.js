@@ -533,6 +533,12 @@ function updateProfilePaginationButtons(type, currentPage, totalPages) {
     paginationContainer.innerHTML = ''; // Clear previous buttons
 
     for (let i = 1; i <= totalPages; i++) {
+        const listItem = document.createElement('li');
+        listItem.className = 'page-item';
+        if (i === currentPage) {
+            listItem.classList.add('active');
+        }
+
         const button = document.createElement('button');
         button.className = 'page-link';
         button.textContent = i;
@@ -549,8 +555,6 @@ function updateProfilePaginationButtons(type, currentPage, totalPages) {
             }
         });
 
-        const listItem = document.createElement('li');
-        listItem.className = 'page-item';
         listItem.appendChild(button);
         paginationContainer.appendChild(listItem);
     }
