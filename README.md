@@ -29,6 +29,9 @@ When accessing the website, you can:
 In comparison to when I first began the assignment, there were a few changes made that could be improved upon in future iterations. These include:
 - **Grid system for displaying games**: While I initially wanted to have two columns displaying the games at the same time, I found it very difficult and costly to try and integrate the API within a new grid structure, as well as the completed/backlogged buttons, without it breaking something else. I decided it wasn't really necessary and the current interface served its purpose well.
 
+# Acknowledgement
+Parcel, SASS & Bootstrap were used for this assignment. Parcel was used to setup the internal servers. Bootstrap libraries were used for easier CSS elements such as the Navbar and the Search function. SASS was used for easier CSS compiling.
+
 # Where was ChatGPT used?
 ChatGPT was used quite often in this assignment. Areas where ChatGPT were used are noted in the markdown of script.js. 
 Prompts that were used include:
