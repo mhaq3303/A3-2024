@@ -142,36 +142,6 @@ select option:checked, .rating-display .rating-star.selected {
   font-size: 14px;
 }
 
-.pagination {
-  white-space: nowrap;
-  flex-wrap: nowrap;
-  justify-content: center;
-  gap: 0;
-  margin-top: 20px;
-  display: flex;
-  overflow-x: auto;
-}
-
-.page-item {
-  margin: 0;
-}
-
-.page-link {
-  color: #fff;
-  text-align: center;
-  background-color: #343a40;
-  border: 1px solid #343a40;
-  margin: 0;
-  padding: .5rem .75rem;
-  display: inline-block;
-}
-
-.page-link:hover, .page-item.active .page-link {
-  color: #fff;
-  background-color: #495057;
-  border-color: #495057;
-}
-
 .button-container {
   gap: 10px;
   display: flex;
@@ -213,10 +183,6 @@ select option:checked, .rating-display .rating-star.selected {
   flex-wrap: nowrap;
   justify-content: center;
   display: flex;
-}
-
-.pagination .page-item {
-  margin: 0 5px;
 }
 
 .pagination .page-link {

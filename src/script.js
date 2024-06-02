@@ -1,14 +1,14 @@
 const apiKey = '91574a6ba1164bd5a7cb766c4251213b';
-let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}`;
+let baseUrl = `https://api.rawg.io/api/games?key=${apiKey}`; //Accessing the API
 let currentPage = 1;
 let totalPages = 1;
 let completedCurrentPage = 1;
 let completedTotalPages = 1;
 let backloggedCurrentPage = 1;
-let backloggedTotalPages = 1;
+let backloggedTotalPages = 1; //3-8: Variables to allow functioning pagination
 const itemsPerPage = 5; // Number of items per page
 let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
-let backloggedGames = JSON.parse(localStorage.getItem('backloggedGames')) || [];
+let backloggedGames = JSON.parse(localStorage.getItem('backloggedGames')) || []; //Local storage system for saving completed/backlogged games
 
 // Function to call the API
 async function callAPI(page, query = '') {
@@ -37,7 +37,7 @@ async function callAPI(page, query = '') {
     }
 }
 
-// Function to display games
+// Function to display games on the main page
 function displayGames(games) {
     const gamesContainer = document.getElementById('games');
     gamesContainer.innerHTML = ''; // Clear previous results
@@ -70,7 +70,7 @@ function displayGames(games) {
         gameGenres.textContent = `Genres: ${game.genres.map(g => g.name).join(', ')}`;
 
         const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'button-container'; // Add this line
+        buttonContainer.className = 'button-container'; 
 
         const markAsCompletedButton = document.createElement('button');
         markAsCompletedButton.className = 'btn-completed';
@@ -78,7 +78,7 @@ function displayGames(games) {
         markAsCompletedButton.addEventListener('click', (event) => {
             event.stopPropagation();
             markAsCompleted(game);
-            alert('Game marked as completed.');
+            alert('Game marked as completed.'); //Triggers for the mark completed button
         });
 
         const markAsBackloggedButton = document.createElement('button');
@@ -87,23 +87,24 @@ function displayGames(games) {
         markAsBackloggedButton.addEventListener('click', (event) => {
             event.stopPropagation();
             markAsBacklogged(game);
-            alert('Game marked as backlogged.');
+            alert('Game marked as backlogged.'); //Triggers for the mark backlogged button
         });
 
-        buttonContainer.appendChild(markAsCompletedButton); // Add this line
-        buttonContainer.appendChild(markAsBackloggedButton); // Add this line
+        buttonContainer.appendChild(markAsCompletedButton); 
+        buttonContainer.appendChild(markAsBackloggedButton);
 
         gameDetails.appendChild(gameTitle);
         gameDetails.appendChild(gameReleaseDate);
         gameDetails.appendChild(gamePlatforms);
         gameDetails.appendChild(gameGenres);
-        gameDetails.appendChild(buttonContainer); // Add this line
+        gameDetails.appendChild(buttonContainer); 
         gameElement.appendChild(gameImage);
         gameElement.appendChild(gameDetails);
         gamesContainer.appendChild(gameElement);
     });
 }
 
+// ChatGPT was used for 109-167
 // Function to update pagination buttons
 function updatePaginationButtons() {
     const pagination = document.getElementById('pagination');
@@ -186,6 +187,8 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
     clearFiltersButton.style.display = 'none';
     gameListTitle.style.display = 'none';
 
+    // ChatGPT was used from 191-244
+    // Loads a separate page of game details, as well as allowing users to rate games
     try {
         const response = await fetch(`https://api.rawg.io/api/games/${gameId}?key=${apiKey}`);
         if (!response.ok) {
@@ -213,6 +216,7 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
             `;
         }
 
+        // Inner HTML within the container to load separate details
         gameDetailsContainer.innerHTML = `
             <div class="game-details-page">
                 <h2>${game.name}</h2>
@@ -241,10 +245,6 @@ async function loadGameDetails(gameId, fromProfile = false, profileSection = '')
     }
 }
 
-
-
-
-
 // Function to mark a game as completed
 function markAsCompleted(game) {
     if (!completedGames.some(g => g.id === game.id)) {
@@ -260,7 +260,7 @@ function markAsCompleted(game) {
     }
 }
 
-// Function to prompt user for rating
+// Function to prompt user for rating when marking a game as complete.
 function promptRating() {
     let rating = prompt("Please rate this game from 1 to 10:");
     rating = parseInt(rating, 10);
@@ -291,8 +291,8 @@ function displayProfilePage() {
     const decadeDropdown = document.getElementById('decadeDropdown');
     const filterDropdown = document.getElementById('filterDropdown');
     const clearFiltersButton = document.getElementById('clearFiltersButton');
-    const gameListTitle = document.getElementById('gameListTitle'); // Get the game list title element
-    const bottomPagination = document.getElementById('pagination'); // Get the bottom pagination element
+    const gameListTitle = document.getElementById('gameListTitle'); 
+    const bottomPagination = document.getElementById('pagination'); 
 
     gamesContainer.style.display = 'none';
     gameDetailsContainer.style.display = 'none';
@@ -300,9 +300,11 @@ function displayProfilePage() {
     decadeDropdown.style.display = 'none';
     filterDropdown.style.display = 'none';
     clearFiltersButton.style.display = 'none';
-    gameListTitle.style.display = 'none'; // Hide the game list title
-    bottomPagination.style.display = 'none'; // Hide the bottom pagination
+    gameListTitle.style.display = 'none'; 
+    bottomPagination.style.display = 'none'; 
 
+    //ChatGPT was used for lines 307-321
+    // Container displaying the button that allows users to select backlogged/completed
     profileGamesContainer.innerHTML = `
         <div class="dropdown" id="profileDropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="profileMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -330,7 +332,7 @@ function displayProfilePage() {
     });
 }
 
-// Function to display completed games
+// Function to display completed games on the profile page
 function displayCompletedGames(page = 1) {
     const profileGamesContainer = document.getElementById('profile-games-list');
     profileGamesContainer.innerHTML = ''; // Clear previous results
@@ -348,6 +350,7 @@ function displayCompletedGames(page = 1) {
         gameImage.alt = `${game.name} cover image`;
         gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'completed')); // Add event listener to load game details
 
+        // Details for games loaded on the main page
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
 
@@ -399,14 +402,17 @@ function displayCompletedGames(page = 1) {
     updateProfilePaginationButtons('completed', page, completedTotalPages);
 }
 
+// Display games added to the backlog
 function displayBackloggedGames(page = 1) {
     const profileGamesContainer = document.getElementById('profile-games-list');
-    profileGamesContainer.innerHTML = ''; // Clear previous results
+    profileGamesContainer.innerHTML = ''; 
 
+    // Loads on page 1 
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const gamesToDisplay = backloggedGames.slice(startIndex, endIndex);
 
+    // Displays details for each game
     gamesToDisplay.forEach(game => {
         const gameElement = document.createElement('div');
         gameElement.className = 'game';
@@ -414,7 +420,7 @@ function displayBackloggedGames(page = 1) {
         const gameImage = document.createElement('img');
         gameImage.src = game.background_image;
         gameImage.alt = `${game.name} cover image`;
-        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'backlogged')); // Add event listener to load game details
+        gameImage.addEventListener('click', () => loadGameDetails(game.id, true, 'backlogged')); 
 
         const gameDetails = document.createElement('div');
         gameDetails.className = 'game-details';
@@ -459,6 +465,7 @@ function displayBackloggedGames(page = 1) {
 }
 
 
+// ChatGPT was used for 467-519
 // Function to go back to the main page
 function goBack() {
     const gamesContainer = document.getElementById('games');
@@ -471,7 +478,7 @@ function goBack() {
     const gameListTitle = document.getElementById('gameListTitle'); 
     const paginationContainer = document.getElementById('pagination');
 
-    // Check if the user was on the profile page
+    // Check if the user was on the profile page. This prevents the API of the main page not loading.
     const urlParams = new URLSearchParams(window.location.search);
     const fromProfile = urlParams.get('fromProfile');
     const profileSection = urlParams.get('profileSection');
@@ -518,16 +525,17 @@ function goBack() {
 function removeGameFromCompleted(gameId) {
     completedGames = completedGames.filter(game => game.id !== gameId);
     localStorage.setItem('completedGames', JSON.stringify(completedGames));
-    displayCompletedGames(); // Refresh the list
+    displayCompletedGames(); 
 }
 
 // Function to remove game from backlogged list
 function removeGameFromBacklogged(gameId) {
     backloggedGames = backloggedGames.filter(game => game.id !== gameId);
     localStorage.setItem('backloggedGames', JSON.stringify(backloggedGames));
-    displayBackloggedGames(); // Refresh the list
+    displayBackloggedGames(); 
 }
 
+// Update pagination buttons according to loaded page
 function updateProfilePaginationButtons(type, currentPage, totalPages) {
     const paginationContainer = document.getElementById('profile-pagination');
     paginationContainer.innerHTML = ''; // Clear previous buttons
@@ -567,17 +575,20 @@ document.getElementById('searchForm').addEventListener('submit', (event) => {
     callAPI(1, query); // Reset to page 1 when performing a new search
 });
 
+// Event listener for the profile button
 document.getElementById('profileButton').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default behavior
     displayProfilePage();
 });
 
+// Event listener for clearing filters
 document.getElementById('clearFiltersButton').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default behavior
     baseUrl = `https://api.rawg.io/api/games?key=${apiKey}&platforms=4,18,1,7`; // Reset to all platforms
     callAPI(1); // Reset to page 1 and load all games without filters
 });
 
+// Event listener for the "GameTraka" used for accessing the main page
 document.getElementById('homeLink').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent default behavior
     
@@ -597,8 +608,8 @@ document.getElementById('homeLink').addEventListener('click', (event) => {
     decadeDropdown.style.display = 'block';
     filterDropdown.style.display = 'block';
     clearFiltersButton.style.display = 'block';
-    gameListTitle.style.display = 'block'; // Show the game list title
-    paginationContainer.style.display = 'block'; // Ensure pagination is displayed
+    gameListTitle.style.display = 'block'; 
+    paginationContainer.style.display = 'block'; 
 
     // Update URL and call API to load all games
     history.pushState({}, '', './');
@@ -606,9 +617,9 @@ document.getElementById('homeLink').addEventListener('click', (event) => {
     callAPI(1); // Load games with default filters
 });
 
-
+// Loads all DOM events when starting the page
 document.addEventListener('DOMContentLoaded', () => {
-    for (let i = 1; i <= 8; i++) { // Assuming you have 8 buttons
+    for (let i = 1; i <= 8; i++) { 
         const button = document.getElementById(`page-${i}`);
         if (button) {
             button.addEventListener('click', (event) => {
@@ -618,7 +629,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-// Function to update selected filters text
+// ChatGPT was used for 636 - 656
+// Function to update selected filters text on the navbar
 function updateSelectedFilters() {
     const selectedDecade = document.querySelector('#decadeDropdown .dropdown-item.active');
     const selectedPlatform = document.querySelector('#filterDropdown .dropdown-item.active[data-type="platform"]');

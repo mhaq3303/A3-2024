@@ -1,4 +1,3 @@
-/* styles.css */
 
 /* Define color variables */
 $black: #2c2c2c;
@@ -20,8 +19,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; /* Ensures the body takes the full viewport height */
-  margin: 0; /* Removes default margin */
+  min-height: 100vh; 
+  margin: 0; 
 }
 
 .navbar {
@@ -38,38 +37,38 @@ body {
 
 /* Style for the dropdown menu */
 select {
-  background-color: #111111; /* Black background */
-  color: #ffffff; /* White text */
-  border: none; /* Remove border */
-  padding: 10px; /* Add some padding */
-  border-radius: 5px; /* Optional: rounded corners */
-  appearance: none; /* Remove default arrow */
-  -webkit-appearance: none; /* Remove default arrow for Safari */
-  -moz-appearance: none; /* Remove default arrow for Firefox */
-  position: relative; /* Positioning for the custom arrow */
-  font-size: 1em; /* Adjust font size */
+  background-color: #111111; 
+  color: #ffffff; 
+  border: none; 
+  padding: 10px; 
+  border-radius: 5px; 
+  appearance: none; 
+  -webkit-appearance: none; 
+  -moz-appearance: none; 
+  position: relative; 
+  font-size: 1em; 
 }
 
 /* Add custom arrow */
 select::after {
-  content: '\25BC'; /* Unicode character for down arrow */
+  content: '\25BC'; 
   position: absolute; 
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
   pointer-events: none; /* Allow clicks to pass through */
-  color: #ffffff; /* White arrow */
+  color: #ffffff; 
 }
 
 /* Style for the options */
 select option {
-  background-color: #111111; /* Black background */
-  color: #ffffff; /* White text */
+  background-color: #111111; 
+  color: #ffffff; 
 }
 
 /* Optional: style for the focused state */
 select:focus {
-  outline: none; /* Remove outline */
+  outline: none; 
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Add a white shadow */
 }
 
@@ -94,6 +93,7 @@ select option:checked {
   }
 }
 
+/* Styling for clearing filters */
 #clearFiltersButton {
   background-color: red;
   color: white;
@@ -107,8 +107,7 @@ select option:checked {
   background-color: darkred;
 }
 
-
-/* Define your custom margin value */
+/* Defining the custom margin value */
 $custom-margin: 20px;
 
 /* Apply the custom margin to all HTML elements except certain elements inside the navbar */
@@ -116,7 +115,7 @@ $custom-margin: 20px;
   margin: $custom-margin;
 }
 
-/* Define your custom text color */
+/* Defining the custom text color */
 $custom-text-color: #c6c6c6;
 
 /* Apply the custom text color to all HTML elements */
@@ -124,6 +123,7 @@ $custom-text-color: #c6c6c6;
   color: $custom-text-color;
 }
 
+/* The main game container used for the main page */
 #game-container {
   background-color: #0c0d0d;
   padding: 20px;
@@ -153,8 +153,8 @@ $custom-text-color: #c6c6c6;
 }
 
 .game img {
-  width: 200px; /* Fixed width */
-  height: 200px; /* Fixed height */
+  width: 200px; 
+  height: 200px; 
   margin-right: 20px;
   border-radius: 5px;
   object-fit: cover;
@@ -163,7 +163,7 @@ $custom-text-color: #c6c6c6;
 .game-details {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align text to the left */
+  align-items: flex-start; 
 }
 
 .game-title {
@@ -175,51 +175,15 @@ $custom-text-color: #c6c6c6;
 .game-release-date, .game-platforms, .game-genres {
   font-size: 14px;
   color: $custom-text-color;
-  margin-top: 5px; /* Add some space between the details */
+  margin-top: 5px; 
   text-align: left;
   width: 100%;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap; // Ensure the pagination buttons do not wrap
-  gap: 0; // Remove any gap between buttons
-  margin-top: 20px; // Adjust the margin as needed for spacing
-  white-space: nowrap; // Prevent buttons from wrapping to the next line
-  overflow-x: auto; // Enable horizontal scrolling if needed
-}
-
-.page-item {
-  margin: 0; // Remove any margin around the pagination items
-}
-
-.page-link {
-  color: #fff; // White text
-  background-color: #343a40; // Dark background
-  border: 1px solid #343a40; // Dark border
-  margin: 0; // Remove any margin around the pagination links
-  padding: 0.5rem 0.75rem; // Adjust padding as needed
-  display: inline-block; // Ensure buttons are inline
-  text-align: center; // Center text
-}
-
-.page-link:hover {
-  color: #fff;
-  background-color: #495057; // Slightly lighter background on hover
-  border-color: #495057; // Slightly lighter border on hover
-}
-
-.page-item.active .page-link {
-  color: #fff;
-  background-color: #495057; // Active background color
-  border-color: #495057; // Active border color
 }
 
 /* Flex container for the buttons */
 .button-container {
   display: flex;
-  gap: 10px; /* Adjust the gap between the buttons as needed */
+  gap: 10px; 
 }
 
 /* Styling for the buttons */
@@ -231,8 +195,8 @@ $custom-text-color: #c6c6c6;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
-  flex: 1; /* Optional: Makes the button take up equal space */
-  text-align: center; /* Center the text */
+  flex: 1; 
+  text-align: center; 
 }
 
 .btn-backlogged {
@@ -243,8 +207,8 @@ $custom-text-color: #c6c6c6;
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
-  flex: 1; /* Optional: Makes the button take up equal space */
-  text-align: center; /* Center the text */
+  flex: 1; 
+  text-align: center;
 }
 
 /* Add hover effects for better user experience */
@@ -256,14 +220,12 @@ $custom-text-color: #c6c6c6;
   background-color: darkmagenta;
 }
 
+
+/* Adjust pagination styling */
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: nowrap; /* Ensure buttons stay in a row */
-}
-
-.pagination .page-item {
-  margin: 0 5px; /* Add some horizontal spacing between buttons */
+  flex-wrap: nowrap; 
 }
 
 .pagination .page-link {
@@ -292,17 +254,17 @@ $custom-text-color: #c6c6c6;
 .dropdown-menu {
   background-color: #111111;
   color: white;
-  padding: 5px 0; /* Adjust padding for the entire dropdown */
+  padding: 5px 0; 
 
   .dropdown-header {
-    padding: 5px 15px; /* Adjust padding for headers */
-    font-size: 0.9em; /* Optionally reduce font size */
+    padding: 5px 15px; 
+    font-size: 0.9em; 
   }
 
   .dropdown-item {
-    padding: 5px 15px; /* Adjust padding for items */
-    margin: 0; /* Remove margin */
-    font-size: 0.9em; /* Optionally reduce font size */
+    padding: 5px 15px; 
+    margin: 0; 
+    font-size: 0.9em; 
     color: white;
 
     &:hover {
@@ -323,7 +285,7 @@ $custom-text-color: #c6c6c6;
 
 /* Dropdown toggle button styles */
 .dropdown-toggle {
-  padding: 5px 15px; /* Adjust padding for the toggle button */
+  padding: 5px 15px; 
   font-size: 0.9em;
   background-color: #111111;
   color: white;
@@ -338,7 +300,7 @@ $custom-text-color: #c6c6c6;
 
 /* Styles for game-details-page */
 .game-details-page {
-  text-align: left; /* Ensure text is aligned to the left */
+  text-align: left;
 }
 
 .game-details-page h2 {
@@ -348,21 +310,20 @@ $custom-text-color: #c6c6c6;
 /* Add custom styles for the dropdown buttons */
 .dropdown {
   display: inline-block;
-  margin-right: 30px; /* Increase this value to create more space between dropdowns */
+  margin-right: 30px; 
 }
 
 #decadeDropdown {
-  margin-right: 30px; /* Increase this value to create more space */
+  margin-right: 30px; 
 }
 
 #filterDropdown {
-  margin-left: 30px; /* Adjust this value to control the spacing if needed */
+  margin-left: 30px;
 }
 
-
 .btn-remove {
-  background-color: #f8d7da; /* Pale red background */
-  color: #721c24; /* Dark red text */
+  background-color: #f8d7da; 
+  color: #721c24; 
   border: none;
   padding: 5px 10px;
   margin-top: 10px;
@@ -372,14 +333,14 @@ $custom-text-color: #c6c6c6;
 }
 
 .btn-remove:hover {
-  background-color: #f5c6cb; /* Slightly darker pale red */
+  background-color: #f5c6cb; 
 }
 
 
 .game-details-page img {
-  max-width: 100%; /* Ensures the image will not exceed the width of its container */
-  height: auto; /* Maintains the aspect ratio */
-  border-radius: 5px; /* Optional: adds rounded corners to the image */
+  max-width: 100%; 
+  height: auto; 
+  border-radius: 5px; 
 }
 
 /* Navbar button styles */
@@ -395,7 +356,6 @@ $custom-text-color: #c6c6c6;
   }
 }
 
-/* Optional: additional styling for consistency */
 .navbar .btn-outline-success:focus, .navbar .btn-outline-info:focus {
   box-shadow: 0 0 0 0.2rem rgba(94, 55, 135, 0.5);
 }
