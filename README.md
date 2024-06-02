@@ -26,7 +26,7 @@ When accessing the website, you can:
 5. Want to get rid of a game in your lists? Just click the "Remove" button on any completed or backlogged game.
 
 # The design process
-In comparison to when I first began the assignment, there were a few changes made that were made from my first wireframes up until now.
+In comparison to when I first began the assignment, there were a few changes made that were made from my first wireframes as well as during the process of creating the final prototype.
 
 - **Grid system for displaying games**: While I initially wanted to have two columns displaying the games at the same time, I found it very difficult and costly to try and integrate the API within a new grid structure, as well as the completed/backlogged buttons, without it breaking something else. I decided it wasn't really necessary and the current interface served its purpose well.
 - **Star-based rating system**: The star-based rating system was what I initially went with, however, I felt that stars didn't express ratings as well as a numerical scale would. It also felt too similar to a lot of rating sites. It was also a bit more complicated to implement. Instead, a numerical rating system was implemented for ease-of-code and for variety.
@@ -38,6 +38,7 @@ There are a few notable bugs that I didn't find time to fully fix or integrate i
 - **Selected filters**: Multiple filters may not select at the same time on occasion, even when the "selected filters" text says otherwise. This can lead to potentially misleading information.
 - **Pagination loading**: The pagination buttons are spread out, and due to the pagination functions in JS, it'd be hard to refit it to a standard Bootstrap pagination bar. Instead, a spread out pagination system is used. Also, if a user clicks the profile page and clicks back on the home page, it'd still load back to page 1.
 - **Data Selection**: Some games are not in the API for whatever reason, meaning some games may not show up for users (eg. TLOZ: Majora's Mask 3D).
+- **Mobile Interface**: I ended up completely forgetting to make it mobile responsive too little too late, and while attempting to use React I found it difficult to have it work with my current code fully. In the future, developers can implement React for a more functional mobile prototype.
 Developers can expand on the filters and pagination functions by simplifying the code further. Pagination can be fixed to be centered in the middle with appropriate styling & functionality without overly complicated JS functions. Filters can be fixed through a better function that checks for games matching the filter using the API.
 
 # Acknowledgement
